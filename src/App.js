@@ -17,7 +17,6 @@ function App() {
             <Tabs changeTab={(tab) => setActiveTabNum(tab)}/>
             <Report numTab = {activeTabNum} />
         </div>
-
     )
 }
 export default App;
