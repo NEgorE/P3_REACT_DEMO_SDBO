@@ -1,0 +1,6 @@
+.nav-tabs{
+    --bs-nav-tabs-border-width: 0.2em;
+    --bs-nav-tabs-link-active-color: #0d6efd;
+    --bs-link-color: #495057;
+    --bs-nav-tabs-link-hover-border-color:var(--bs-nav-tabs-link-active-color);
+}

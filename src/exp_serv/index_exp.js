@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3001
 
-const merchant_model = require('./merchant_model')
+const select_model = require('./select_model')
 
 app.use(express.json())
 app.use(function (req, res, next) {
@@ -13,7 +13,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  merchant_model.getMerchants()
+  select_model.getMerchants()
   .then(response => {
     res.status(200).send(response);
   })
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/select_merchants/:count_sel', (req, res) => {
-  merchant_model.selectMerchants(req.params.count_sel)
+  select_model.selectMerchants(req.params.count_sel)
   .then(response => {
     res.status(200).send(response);
   })
@@ -33,7 +33,7 @@ app.get('/select_merchants/:count_sel', (req, res) => {
 })
 
 app.get('/select_mau/', (req, res) => {
-  merchant_model.selectMau()
+  select_model.selectMau()
   .then(response => {
     res.status(200).send(response);
   })
@@ -43,7 +43,7 @@ app.get('/select_mau/', (req, res) => {
 })
 
 app.get('/select_filter_cal/', (req, res) => {
-  merchant_model.selectFilterCal()
+  select_model.selectFilterCal()
   .then(response => {
     res.status(200).send(response);
   })
