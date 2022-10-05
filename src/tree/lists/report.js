@@ -5,12 +5,7 @@ import {TABS} from '../components/tabs/constants';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./report.css";
 
-interface IProps {
-    numTab: number
-}
-
-
-export const Report: FC<IProps> = ({numTab}) => {
+export const Report = ({numTab}) => {
 
     var content = TABS.filter(item => item.type === numTab).map(item => item.obj)[0]
 
@@ -19,6 +14,5 @@ export const Report: FC<IProps> = ({numTab}) => {
         <div className="container-fluid report">
             {content ? content : 'There is no information about tab N* ' + numTab}
         </div>
-        
     )
 }
