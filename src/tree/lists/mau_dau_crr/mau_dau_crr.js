@@ -9,8 +9,8 @@ export const Maudaucrr = ({}) => {
             <div class="row">
                 <div class='col col-8'>
                     <div class="row">
-                        <div class='col col-6'>CH2</div>
-                        <div class='col col-6'>CH2</div>
+                        <div class='col col-6'>Filters</div>
+                        <div class='col col-6'>RadioButtons</div>
                     </div>
                     <div class="row">
                         <div class='col col-6'>CH2</div>
