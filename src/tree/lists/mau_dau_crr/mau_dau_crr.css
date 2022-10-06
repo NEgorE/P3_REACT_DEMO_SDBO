@@ -1,0 +1,25 @@
+.mh-30 {
+    height: 30%;
+}
+.mh-40 {
+    height: 40%;
+}
+.mh-60 {
+    height: 60%;
+}
+.mh-70 {
+    height: 70%;
+}
+
+.col {
+    border: 1px  solid #32a1ce;
+  }
+
+.obj {
+    border-radius: 0.4em;
+    background-color: #fff;
+}
+
+.cobj{
+    padding: calc(var(--bs-gutter-x) * .2);
+}
