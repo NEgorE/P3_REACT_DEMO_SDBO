@@ -42,6 +42,20 @@ function selectMau() {
   });
 }
 
+function selectMauBySegment() {
+  return new Promise(function (resolve, reject) {
+
+    const select_q =  'select * from dbo.monthly_data_mart_by_segment_3';
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 function selectFilterCal() {
   return new Promise(function (resolve, reject) {
 
@@ -63,5 +77,6 @@ module.exports = {
     getMerchants,
     selectMerchants,
     selectMau,
-    selectFilterCal
+    selectFilterCal,
+    selectMauBySegment
   }

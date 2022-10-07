@@ -11,13 +11,14 @@
     height: 70%;
 }
 
-.col {
-    border: 1px  solid #32a1ce;
-  }
+.col{
+    border: 1px solid blue;
+}
 
 .obj {
     border-radius: 0.4em;
     background-color: #fff;
+    border: 0.15em solid #d9d9d9;
 }
 
 .cobj{
