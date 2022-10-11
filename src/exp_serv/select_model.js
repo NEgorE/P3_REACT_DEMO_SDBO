@@ -56,6 +56,20 @@ function selectMauBySegment() {
   });
 }
 
+function selectMauBySystem() {
+  return new Promise(function (resolve, reject) {
+
+    const select_q =  "SELECT *, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR FROM dbo.mau_dau_by_systems_1 where date_year_month = (select max(date_year_month) from dbo.mau_dau_by_systems_1)";
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 function selectFilterCal() {
   return new Promise(function (resolve, reject) {
 
@@ -78,5 +92,6 @@ module.exports = {
     selectMerchants,
     selectMau,
     selectFilterCal,
-    selectMauBySegment
+    selectMauBySegment,
+    selectMauBySystem
   }

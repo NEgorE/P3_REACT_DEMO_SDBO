@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
-import {Tabs} from './tree/components/tabs/tabs.tsx';
+import {Tabs} from './tree/components/tabs/tabs.js';
 import {TABS} from './tree/components/tabs/constants';
 import {Report} from './tree/lists/report.js';
 

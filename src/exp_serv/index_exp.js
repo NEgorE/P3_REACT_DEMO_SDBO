@@ -62,6 +62,16 @@ app.get('/select_mau_by_segment/', (req, res) => {
   })
 })
 
+app.get('/select_mau_by_system/', (req, res) => {
+  select_model.selectMauBySystem()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)

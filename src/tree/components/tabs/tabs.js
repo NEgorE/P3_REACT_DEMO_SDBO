@@ -5,16 +5,12 @@ import {TABS} from './constants';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./tabs.css";
 
-interface IProps {
-  changeTab: (tab: number) => void
-}
 
-
-export const Tabs: FC<IProps> = ({changeTab}) => {
+export const Tabs = ({changeTab}) => {
 
   const [activeTabNum, setActiveTabNum] = useState(TABS.filter(item => item.type === 1).map(item => item.type)[0])
 
-  const setActiveTab = (tab: number) => {
+  const setActiveTab = (tab) => {
     setActiveTabNum(tab)
   }
 
