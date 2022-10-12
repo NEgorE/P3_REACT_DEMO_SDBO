@@ -58,6 +58,7 @@ export const Maudaucrr = () => {
         );
     };
 
+    const [kpi1, setKpi1] = useState(false)
     const [chart1, setChart1] = useState(false)
     const [chart1data, setchart1data] = useState(false)
     const [chart2, setChart2] = useState(false)
@@ -82,6 +83,7 @@ export const Maudaucrr = () => {
         if(chart2data){
             generateChart2(chart2data);
             generateChart4(chart2data);
+            generateKpi1(chart2data);
         }
     }, [chart2data])
 
@@ -136,6 +138,44 @@ export const Maudaucrr = () => {
           });
     }
 
+    function generateKpi1(data) {
+        const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
+        const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
+        const valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau)[0])
+        const valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau)[0])
+        const element = (
+            <div class='col obj h-100'>
+                <div class='row h-25 row-kpi'>
+                    <div class='col h-100'>
+                        <div class="row align-items-end h-100">
+                            <p class='kpi-text-f-title'>MAU for {maxPeriod}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class='row h-75 row-kpi'>
+                    <div class='col col-7 h-100 '>
+                        <div class="row align-items-center h-100">
+                            <p class='kpi-text-f'>{valueOfMaxPeriod}</p>
+                        </div>
+                        </div>
+                    <div class='col col-5'>
+                        <div class='row mh-60'>
+                            <div class="row align-items-end h-100">
+                                <p class='kpi-text-s'>{valueOfMaxPeriodPref}</p>
+                            </div>
+                        </div>
+                        <div class='row mh-40'>
+                            <div class="row align-items-start h-100">
+                                <p class='kpi-text-s-title'>{maxPeriodPref}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+        setKpi1(element)
+    }
+
     function generateChart1(data) {
         const element = (
             <ResponsiveContainer width={'100%'} height={'100%'}>
@@ -146,11 +186,13 @@ export const Maudaucrr = () => {
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
-                    cy="50%"
-                    outerRadius={'100%'}
+                    cy="100%"
+                    outerRadius={'200%'}
                     fill="#8884d8"
                     labelLine={false}
                     label={renderCustomizedLabel}
+                    startAngle={180}
+                    endAngle={0}
                     >
                         {data.map((item, index) => (
                             <Cell
@@ -259,17 +301,19 @@ export const Maudaucrr = () => {
     return (
         <div className="container-fluid h-100">
             <div class="row mh-40">
-                <div class='col col-9 h-100'>
-                    <div class="row">
+                <div class='col col-8 h-100'>
+                    <div class="row h-25">
                         <div class='col col-6'>Filters</div>
                         <div class='col col-6'>RadioButtons</div>
                     </div>
-                    <div class="row">
-                        <div class='col col-6'>KPI1</div>
+                    <div class="row h-75">
+                        <div class='col h-100 cobj' >
+                            { kpi1 ? kpi1 : 'Smth wrong' }
+                        </div>
                         <div class='col col-6'>KPI2</div>
                     </div>
                 </div>
-                <div class='col col-3 h-100 cobj' >
+                <div class='col col-4 h-100 cobj' >
                     <div class='col obj h-100'>
                         { chart1 ? chart1 : 'Smth wrong' }
                     </div>
@@ -292,7 +336,6 @@ export const Maudaucrr = () => {
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>  
     )
 }
