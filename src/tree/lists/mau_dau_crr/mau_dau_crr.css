@@ -1,3 +1,6 @@
+.mh-20 {
+    height: 20%;
+}
 .mh-30 {
     height: 30%;
 }
@@ -10,8 +13,12 @@
 .mh-70 {
     height: 70%;
 }
+.mh-80 {
+    height: 80%;
+}
 
 .col{
+    border: 1px  solid #3242ce;
 }
 
 .obj {
@@ -47,10 +54,9 @@
     padding-left: calc(var(--bs-gutter-x));
     color: var(--bs-gray-600);
 }
-
 .kpi-text-f-title{
     margin: 0;
-    font-size: 3em;
+    font-size: 2.5em;
     text-align: center;
     color: var(--bs-gray-600);
 }

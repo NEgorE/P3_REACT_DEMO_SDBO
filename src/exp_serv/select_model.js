@@ -84,9 +84,6 @@ function selectFilterCal() {
   });
 }
 
-
-
-
 module.exports = {
     getMerchants,
     selectMerchants,

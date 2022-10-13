@@ -45,7 +45,7 @@ export const Maudaucrr = () => {
     };
 
     const RADIAN = Math.PI / 180;
-    const renderCustomizedLabel = (props) => {
+    const CustomizedLabelChart1 = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
         const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
         const x = cx + radius * Math.cos(-midAngle * RADIAN) - 5;
@@ -58,7 +58,10 @@ export const Maudaucrr = () => {
         );
     };
 
+    const [rb1, setRB1] = useState(false)
+    const [currMetric, setCurrMetric] = useState(1)
     const [kpi1, setKpi1] = useState(false)
+    const [kpi2, setKpi2] = useState(false)
     const [chart1, setChart1] = useState(false)
     const [chart1data, setchart1data] = useState(false)
     const [chart2, setChart2] = useState(false)
@@ -67,10 +70,17 @@ export const Maudaucrr = () => {
     const [chart3, setChart3] = useState(false)
     const [chart3data, setchart3data] = useState(false)
 
+    const METRICS = [
+        { npp: 'metric1', title: 'MAU', def_ch: true},
+        { npp: 'metric2', title: 'DAU', def_ch: false},
+    ]
+
     useEffect(() => {
+        console.log('load data');
         getChart2Data();
         getChart3Data();
         getChart1Data();
+        genetareRB1(METRICS);
     }, [])
 
     useEffect(() => {
@@ -84,6 +94,7 @@ export const Maudaucrr = () => {
             generateChart2(chart2data);
             generateChart4(chart2data);
             generateKpi1(chart2data);
+            generateKpi2(chart2data);
         }
     }, [chart2data])
 
@@ -138,6 +149,38 @@ export const Maudaucrr = () => {
           });
     }
 
+    function onChangeMetric() {
+        var ele = document.getElementsByName('btnradio');
+            for(let i = 0; i < ele.length; i++) {
+                if(ele[i].checked){
+                    setCurrMetric(ele[i].value);
+                }
+            }
+        console.log(currMetric)
+    }
+
+    function genetareRB1(data) {
+        const element = (
+            <div class="btn-group obj" role="group" aria-label="Basic radio toggle button group">
+                {data.map((el, key) =>(
+                    [
+                        el.def_ch ? 
+                            <input 
+                                type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" defaultChecked={true}
+                                value={`${el.npp}`} onChange={onChangeMetric()}
+                            /> 
+                            : 
+                            <input type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" 
+                                value={`${el.npp}`} onChange={onChangeMetric()}
+                            />,
+                        <label className="btn btn-outline-primary" for={`btncheck ${key}`} onClick={onChangeMetric()}>{el.title}</label>,
+                    ]
+                ))}
+            </div>
+        )
+        setRB1(element)
+    }
+
     function generateKpi1(data) {
         const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
         const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
@@ -176,6 +219,45 @@ export const Maudaucrr = () => {
         setKpi1(element)
     }
 
+    function generateKpi2(data) {
+        const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
+        const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
+        const maxPeriodPref2 = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[2]
+        const valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau_comp)[0])
+        const valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau_comp)[0])
+        const element = (
+            <div class='col obj h-100'>
+                <div class='row h-25 row-kpi'>
+                    <div class='col h-100'>
+                        <div class="row align-items-end h-100">
+                            <p class='kpi-text-f-title'>MAU % - {maxPeriod}/{maxPeriodPref}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class='row h-75 row-kpi'>
+                    <div class='col col-7 h-100 '>
+                        <div class="row align-items-center h-100">
+                            <p class='kpi-text-f'>{valueOfMaxPeriod} %</p>
+                        </div>
+                        </div>
+                    <div class='col col-5'>
+                        <div class='row mh-60'>
+                            <div class="row align-items-end h-100">
+                                <p class='kpi-text-s'>{valueOfMaxPeriodPref} %</p>
+                            </div>
+                        </div>
+                        <div class='row mh-40'>
+                            <div class="row align-items-start h-100">
+                                <p class='kpi-text-s-title'>{maxPeriodPref}/{maxPeriodPref2}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+        setKpi2(element)
+    }
+
     function generateChart1(data) {
         const element = (
             <ResponsiveContainer width={'100%'} height={'100%'}>
@@ -190,7 +272,7 @@ export const Maudaucrr = () => {
                     outerRadius={'200%'}
                     fill="#8884d8"
                     labelLine={false}
-                    label={renderCustomizedLabel}
+                    label={CustomizedLabelChart1}
                     startAngle={180}
                     endAngle={0}
                     >
@@ -302,15 +384,19 @@ export const Maudaucrr = () => {
         <div className="container-fluid h-100">
             <div class="row mh-40">
                 <div class='col col-8 h-100'>
-                    <div class="row h-25">
+                    <div class="row mh-20">
                         <div class='col col-6'>Filters</div>
-                        <div class='col col-6'>RadioButtons</div>
+                        <div class='col col-6 cobj'>
+                            {rb1 ? rb1 : 'Smth wrong'}
+                        </div>
                     </div>
-                    <div class="row h-75">
+                    <div class="row mh-80">
                         <div class='col h-100 cobj' >
                             { kpi1 ? kpi1 : 'Smth wrong' }
                         </div>
-                        <div class='col col-6'>KPI2</div>
+                        <div class='col h-100 cobj' >
+                            { kpi2 ? kpi2 : 'Smth wrong' }
+                        </div>
                     </div>
                 </div>
                 <div class='col col-4 h-100 cobj' >
