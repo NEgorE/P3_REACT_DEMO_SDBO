@@ -48,12 +48,12 @@ export const Maudaucrr = () => {
     const CustomizedLabelChart1 = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
         const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+        const x = cx + radius * Math.cos(-midAngle * RADIAN) + 7;
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
         return (
             <text x={x} y={y} fill="white" textAnchor={'middle'} dominantBaseline="central">
-                {`${value} (${(percent * 100).toFixed(0)}%)`}
+                {`${value} (${(percent * 100).toFixed(1)}%)`}
             </text>
         );
     };
@@ -92,12 +92,13 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         if(chart2data){
-            generateChart2(chart2data);
+            console.log('render chart 2, 4 ,kpi 1,2');
+            generateChart2(chart2data, METRICS, currMetric);
             generateChart4(chart2data);
             generateKpi1(chart2data);
             generateKpi2(chart2data);
         }
-    }, [chart2data])
+    }, [chart2data, currMetric])
 
     useEffect(() => {
         if(chart3data){
@@ -295,9 +296,16 @@ export const Maudaucrr = () => {
         setChart1(element);
     }
 
-    function generateChart2(data) {
-        const dMin = Math.round((Math.min(...data.map(o => o.mau)) - Math.min(...data.map(o => o.mau))*0.02)/100)*100
-        const dMax = Math.round((Math.max(...data.map(o => o.mau)) + Math.min(...data.map(o => o.mau))*0.02)/100)*100
+    function generateChart2(data , METRICS, currMetric) {
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
+        if(use_metric === 'mau') {
+            var dMin = Math.round((Math.min(...data.map(o => o.mau)) - Math.min(...data.map(o => o.mau))*0.02)/100)*100;
+            var dMax = Math.round((Math.max(...data.map(o => o.mau)) + Math.min(...data.map(o => o.mau))*0.02)/100)*100;
+        }
+        else {
+            var dMin = Math.round((Math.min(...data.map(o => o.dau)) - Math.min(...data.map(o => o.dau))*0.02)/100)*100;
+            var dMax = Math.round((Math.max(...data.map(o => o.dau)) + Math.min(...data.map(o => o.dau))*0.02)/100)*100;
+        }
         const element = (
             <ResponsiveContainer width={'100%'} height={'100%'}>
                 <LineChart
@@ -314,7 +322,7 @@ export const Maudaucrr = () => {
                     <YAxis domain={[dMin, dMax]} />
                     <Tooltip />
                     <Brush dataKey='date_year_month' height={10} />
-                    <Line type="monotone" dataKey="mau" stroke="#4477aa" fill="#4477aa" strokeDasharray="10 5" strokeWidth={2} dot={{ r: 5 }} label={<CustomizedLabelChart2 />} />
+                    <Line type="monotone" dataKey={`${use_metric}`} stroke="#4477aa" fill="#4477aa" strokeDasharray="10 5" strokeWidth={2} dot={{ r: 5 }} label={<CustomizedLabelChart2 />} />
                 </LineChart>
             </ResponsiveContainer>
         ); 
