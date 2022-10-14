@@ -60,3 +60,12 @@
     text-align: center;
     color: var(--bs-gray-600);
 }
+
+.row-rb{
+    margin-left: 0;
+    margin-right: 0;
+}
+.rb{
+    padding-left: 0;
+    padding-right: 0;
+}

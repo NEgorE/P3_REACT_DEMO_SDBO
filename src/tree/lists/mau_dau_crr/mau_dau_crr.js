@@ -48,7 +48,7 @@ export const Maudaucrr = () => {
     const CustomizedLabelChart1 = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
         const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN) - 5;
+        const x = cx + radius * Math.cos(-midAngle * RADIAN);
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
         return (
@@ -59,7 +59,7 @@ export const Maudaucrr = () => {
     };
 
     const [rb1, setRB1] = useState(false)
-    const [currMetric, setCurrMetric] = useState(1)
+    const [currMetric, setCurrMetric] = useState('metric1')
     const [kpi1, setKpi1] = useState(false)
     const [kpi2, setKpi2] = useState(false)
     const [chart1, setChart1] = useState(false)
@@ -71,12 +71,12 @@ export const Maudaucrr = () => {
     const [chart3data, setchart3data] = useState(false)
 
     const METRICS = [
-        { npp: 'metric1', title: 'MAU', def_ch: true},
-        { npp: 'metric2', title: 'DAU', def_ch: false},
+        { npp: 'metric1', title: 'MAU', def_ch: true, value: 'mau'},
+        { npp: 'metric2', title: 'DAU', def_ch: false, value: 'dau'},
     ]
 
     useEffect(() => {
-        console.log('load data');
+        console.log('load data during first render');
         getChart2Data();
         getChart3Data();
         getChart1Data();
@@ -85,9 +85,10 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         if(chart1data){
-            generateChart1(chart1data);
+            console.log('render chart 1');
+            generateChart1(chart1data, METRICS, currMetric);
         }
-    }, [chart1data])
+    }, [chart1data, currMetric])
 
     useEffect(() => {
         if(chart2data){
@@ -103,6 +104,10 @@ export const Maudaucrr = () => {
             generateChart3(chart3data);
         }
     }, [chart3data])
+
+    useEffect(() => {
+        console.log(currMetric);
+    }, [currMetric])
 
     function getChart2Data() {
         let result = false;
@@ -140,8 +145,9 @@ export const Maudaucrr = () => {
             for (let i = 0; i < result.length; i++) {
                 const currentResult = result[i]
                 let result2 = {};
-                result2.name = currentResult.sys_type
-                result2.value = parseInt(currentResult.mau)
+                result2.sys_type = currentResult.sys_type
+                result2.mau = parseInt(currentResult.mau)
+                result2.dau = parseInt(currentResult.dau)
                 result2.color = currentResult.color
                 resultArr.push(result2)
             }
@@ -149,33 +155,29 @@ export const Maudaucrr = () => {
           });
     }
 
-    function onChangeMetric() {
-        var ele = document.getElementsByName('btnradio');
-            for(let i = 0; i < ele.length; i++) {
-                if(ele[i].checked){
-                    setCurrMetric(ele[i].value);
-                }
-            }
-        console.log(currMetric)
+    const onChangeMetric = e => {
+        setCurrMetric(e.target.value);
     }
 
     function genetareRB1(data) {
         const element = (
-            <div class="btn-group obj" role="group" aria-label="Basic radio toggle button group">
-                {data.map((el, key) =>(
-                    [
-                        el.def_ch ? 
-                            <input 
-                                type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" defaultChecked={true}
-                                value={`${el.npp}`} onChange={onChangeMetric()}
-                            /> 
-                            : 
-                            <input type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" 
-                                value={`${el.npp}`} onChange={onChangeMetric()}
-                            />,
-                        <label className="btn btn-outline-primary" for={`btncheck ${key}`} onClick={onChangeMetric()}>{el.title}</label>,
-                    ]
-                ))}
+            <div class="row align-items-center h-100 row-rb">
+                <div class="btn-group obj rb" role="group" aria-label="Basic radio toggle button group">
+                    {data.map((el, key) =>(
+                        [
+                            el.def_ch ? 
+                                <input 
+                                    type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" defaultChecked={true}
+                                    value={`${el.npp}`} onChange={onChangeMetric}
+                                /> 
+                                : 
+                                <input type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" 
+                                    value={`${el.npp}`} onChange={onChangeMetric}
+                                />,
+                            <label className="btn btn-outline-primary" htmlFor={`btncheck ${key}`} >{el.title}</label>,
+                        ]
+                    ))}
+                </div>
             </div>
         )
         setRB1(element)
@@ -190,7 +192,7 @@ export const Maudaucrr = () => {
             <div class='col obj h-100'>
                 <div class='row h-25 row-kpi'>
                     <div class='col h-100'>
-                        <div class="row align-items-end h-100">
+                        <div class="row h-100">
                             <p class='kpi-text-f-title'>MAU for {maxPeriod}</p>
                         </div>
                     </div>
@@ -258,15 +260,16 @@ export const Maudaucrr = () => {
         setKpi2(element)
     }
 
-    function generateChart1(data) {
+    function generateChart1(data, METRICS, currMetric) {
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
         const element = (
             <ResponsiveContainer width={'100%'} height={'100%'}>
                 <PieChart>
                     <Pie
                     data={data}
                     color="#000000"
-                    dataKey="value"
-                    nameKey="name"
+                    dataKey={`${use_metric}`}
+                    nameKey="sys_type"
                     cx="50%"
                     cy="100%"
                     outerRadius={'200%'}
@@ -275,6 +278,7 @@ export const Maudaucrr = () => {
                     label={CustomizedLabelChart1}
                     startAngle={180}
                     endAngle={0}
+                    //isAnimationActive={false}
                     >
                         {data.map((item, index) => (
                             <Cell
