@@ -3,4 +3,7 @@
     --bs-nav-tabs-link-active-color: #0d6efd;
     --bs-link-color: #495057;
     --bs-nav-tabs-link-hover-border-color:var(--bs-nav-tabs-link-active-color);
+    --bs-nav-tabs-link-active-bg: #f2f2f2;
+    --bs-nav-tabs-link-active-border-color: #dee2e6 #dee2e6 #f2f2f2;
+    margin-top: 1em;
 }

@@ -1,6 +1,8 @@
 .report{
     border-width: 0.2em;
     border-style: solid;
-    border-color:  #fff #dee2e6 #dee2e6;
-    
+    border-color:  #f2f2f2 #dee2e6 #dee2e6;
+    padding: calc(var(--bs-gutter-x) * .2);
+    height: 46em;
+    background-color: #f2f2f2;
 }
