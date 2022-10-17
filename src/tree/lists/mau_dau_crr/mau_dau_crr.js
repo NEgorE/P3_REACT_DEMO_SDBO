@@ -95,16 +95,17 @@ export const Maudaucrr = () => {
             console.log('render chart 2, 4 ,kpi 1,2');
             generateChart2(chart2data, METRICS, currMetric);
             generateChart4(chart2data);
-            generateKpi1(chart2data);
-            generateKpi2(chart2data);
+            generateKpi1(chart2data, METRICS, currMetric);
+            generateKpi2(chart2data, METRICS, currMetric);
         }
     }, [chart2data, currMetric])
 
     useEffect(() => {
         if(chart3data){
-            generateChart3(chart3data);
+            console.log('render chart 3');
+            generateChart3(chart3data, METRICS, currMetric);
         }
-    }, [chart3data])
+    }, [chart3data, currMetric])
 
     useEffect(() => {
         console.log(currMetric);
@@ -184,17 +185,24 @@ export const Maudaucrr = () => {
         setRB1(element)
     }
 
-    function generateKpi1(data) {
+    function generateKpi1(data, METRICS, currMetric) {
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0].toUpperCase()
         const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
         const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
-        const valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau)[0])
-        const valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau)[0])
+        if(use_metric === 'MAU') {
+            var valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau)[0])
+            var valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau)[0])
+        }
+        else {
+            var valueOfMaxPeriod = data.filter(item => item.date_year_month === maxPeriod).map(item => item.dau)[0]
+            var valueOfMaxPeriodPref = data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.dau)[0]
+        }
         const element = (
             <div class='col obj h-100'>
                 <div class='row h-25 row-kpi'>
                     <div class='col h-100'>
                         <div class="row h-100">
-                            <p class='kpi-text-f-title'>MAU for {maxPeriod}</p>
+                            <p class='kpi-text-f-title'>{use_metric} for {maxPeriod}</p>
                         </div>
                     </div>
                 </div>
@@ -222,18 +230,25 @@ export const Maudaucrr = () => {
         setKpi1(element)
     }
 
-    function generateKpi2(data) {
+    function generateKpi2(data, METRICS, currMetric) {
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0].toUpperCase()
         const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
         const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
         const maxPeriodPref2 = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[2]
-        const valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau_comp)[0])
-        const valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau_comp)[0])
+        if(use_metric === 'MAU') {
+            var valueOfMaxPeriod = parseInt(data.filter(item => item.date_year_month === maxPeriod).map(item => item.mau_comp)[0])
+            var valueOfMaxPeriodPref = parseInt(data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.mau_comp)[0])
+        }
+        else {
+            var valueOfMaxPeriod = data.filter(item => item.date_year_month === maxPeriod).map(item => item.dau_comp)[0]
+            var valueOfMaxPeriodPref = data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.dau_comp)[0]
+        }
         const element = (
             <div class='col obj h-100'>
                 <div class='row h-25 row-kpi'>
                     <div class='col h-100'>
                         <div class="row align-items-end h-100">
-                            <p class='kpi-text-f-title'>MAU % - {maxPeriod}/{maxPeriodPref}</p>
+                            <p class='kpi-text-f-title'>{use_metric} % - {maxPeriod}/{maxPeriodPref}</p>
                         </div>
                     </div>
                 </div>
@@ -329,12 +344,14 @@ export const Maudaucrr = () => {
         setChart2(element);
     }
 
-    function generateChart3(data) {
+    function generateChart3(data, METRICS, currMetric) {
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
+        const new_data = [...data.filter(item => item.type === use_metric)]
         const dMin = 0;
         const element = (
             <ResponsiveContainer width={'100%'} height={'100%'}>
                 <BarChart
-                    data={data}
+                    data={new_data}
                     margin={{
                     top: 5,
                     right: 30,
