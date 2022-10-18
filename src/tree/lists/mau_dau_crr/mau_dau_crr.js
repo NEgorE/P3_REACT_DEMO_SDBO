@@ -1,4 +1,5 @@
 import React, { PureComponent, useEffect, useState } from "react";
+import { subscriber, messageService } from '../../../MessageService.js';
 
 import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
 
@@ -58,8 +59,12 @@ export const Maudaucrr = () => {
         );
     };
 
+    console.log(subscriber._value );
+
+    const f_render_metric = subscriber._value ? subscriber._value : 'metric1'
+
     const [rb1, setRB1] = useState(false)
-    const [currMetric, setCurrMetric] = useState('metric1')
+    const [currMetric, setCurrMetric] = useState(f_render_metric)
     const [kpi1, setKpi1] = useState(false)
     const [kpi2, setKpi2] = useState(false)
     const [chart1, setChart1] = useState(false)
@@ -71,8 +76,8 @@ export const Maudaucrr = () => {
     const [chart3data, setchart3data] = useState(false)
 
     const METRICS = [
-        { npp: 'metric1', title: 'MAU', def_ch: true, value: 'mau'},
-        { npp: 'metric2', title: 'DAU', def_ch: false, value: 'dau'},
+        { npp: 'metric1', title: 'MAU', value: 'mau'},
+        { npp: 'metric2', title: 'DAU', value: 'dau'},
     ]
 
     useEffect(() => {
@@ -80,7 +85,7 @@ export const Maudaucrr = () => {
         getChart2Data();
         getChart3Data();
         getChart1Data();
-        genetareRB1(METRICS);
+        genetareRB1(METRICS, f_render_metric);
     }, [])
 
     useEffect(() => {
@@ -108,7 +113,7 @@ export const Maudaucrr = () => {
     }, [chart3data, currMetric])
 
     useEffect(() => {
-        console.log(currMetric);
+        subscriber.next(currMetric)
     }, [currMetric])
 
     function getChart2Data() {
@@ -161,13 +166,13 @@ export const Maudaucrr = () => {
         setCurrMetric(e.target.value);
     }
 
-    function genetareRB1(data) {
+    function genetareRB1(data, f_render_metric) {
         const element = (
             <div class="row align-items-center h-100 row-rb">
                 <div class="btn-group obj rb" role="group" aria-label="Basic radio toggle button group">
                     {data.map((el, key) =>(
                         [
-                            el.def_ch ? 
+                            el.npp === f_render_metric ? 
                                 <input 
                                     type="radio" class="btn-check" name="btnradio" id={`btncheck ${key}`} autoComplete="off" defaultChecked={true}
                                     value={`${el.npp}`} onChange={onChangeMetric}

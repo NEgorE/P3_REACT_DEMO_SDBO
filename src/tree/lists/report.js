@@ -1,6 +1,6 @@
-import React, {FC, useEffect, useState} from "react"
-import classnames from "classnames"
+import React, { useEffect } from "react"
 import {TABS} from '../components/tabs/constants';
+import { subscriber, messageService } from '../../MessageService.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./report.css";
@@ -12,7 +12,7 @@ export const Report = ({numTab}) => {
     return (
         //one day there will be an object :)
         <div className="container-fluid report">
-            {content ? content : 'There is no information about tab N* ' + numTab}
+            {content ? content : 'There is no information about tab N* ' + numTab + ' ' + subscriber._value}
         </div>
     )
 }
