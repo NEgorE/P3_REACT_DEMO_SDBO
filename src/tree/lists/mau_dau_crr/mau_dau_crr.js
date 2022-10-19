@@ -59,12 +59,13 @@ export const Maudaucrr = () => {
         );
     };
 
-    console.log(subscriber._value );
+    //console.log(subscriber);
 
     const f_render_metric = subscriber._value ? subscriber._value : 'metric1'
 
     const [rb1, setRB1] = useState(false)
     const [currMetric, setCurrMetric] = useState(f_render_metric)
+    const [currFilter, setCurrFilter] = useState(false)
     const [filter1data, setFilter1data] = useState(false)
     const [filter1, setFilter1] = useState(false)
     const [kpi1, setKpi1] = useState(false)
@@ -93,21 +94,21 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         if(filter1data){
-            console.log(filter1data);
+            //console.log(filter1data);
             generateFilter1(filter1data);
         }
     }, [filter1data])
 
     useEffect(() => {
         if(chart1data){
-            console.log('render chart 1');
+            //console.log('render chart 1');
             generateChart1(chart1data, METRICS, currMetric);
         }
     }, [chart1data, currMetric])
 
     useEffect(() => {
         if(chart2data){
-            console.log('render chart 2, 4 ,kpi 1,2');
+            //console.log('render chart 2, 4 ,kpi 1,2');
             generateChart2(chart2data, METRICS, currMetric);
             generateChart4(chart2data);
             generateKpi1(chart2data, METRICS, currMetric);
@@ -117,12 +118,14 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         if(chart3data){
-            console.log('render chart 3');
+            //console.log('render chart 3');
             generateChart3(chart3data, METRICS, currMetric);
         }
     }, [chart3data, currMetric])
 
     useEffect(() => {
+        console.log(subscriber);
+        console.log(subscriber._value);
         subscriber.next(currMetric)
     }, [currMetric])
 
@@ -178,6 +181,7 @@ export const Maudaucrr = () => {
                 result2.mau = parseInt(currentResult.mau)
                 result2.dau = parseInt(currentResult.dau)
                 result2.color = currentResult.color
+                result2.date_year_month = currentResult.date_year_month
                 resultArr.push(result2)
             }
             setchart1data(resultArr);
@@ -197,7 +201,7 @@ export const Maudaucrr = () => {
                             <input type="radio" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
                                 //value={`${el.npp}`} //onChange={onChangeMetric}
                             />,
-                            <label className="btn btn-outline-primary" htmlFor={`btnf1check ${key}`} >{el.title}</label>,
+                            <label className="btn btn-outline-primary" htmlFor={`btnf1check ${key}`} >{el.date_yq}</label>,
                         ]
                     ))}
                 </div>
@@ -323,36 +327,44 @@ export const Maudaucrr = () => {
 
     function generateChart1(data, METRICS, currMetric) {
         const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
-        const element = (
-            <ResponsiveContainer width={'100%'} height={'100%'}>
-                <PieChart>
-                    <Pie
-                    data={data}
-                    color="#000000"
-                    dataKey={`${use_metric}`}
-                    nameKey="sys_type"
-                    cx="50%"
-                    cy="100%"
-                    outerRadius={'200%'}
-                    fill="#8884d8"
-                    labelLine={false}
-                    label={CustomizedLabelChart1}
-                    startAngle={180}
-                    endAngle={0}
-                    //isAnimationActive={false}
-                    >
-                        {data.map((item, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={item.color}
-                            />
-                        ))}
-                    </Pie>
-                    <Legend verticalAlign="top"/>
-                    <Tooltip />
-                    </PieChart>
-            </ResponsiveContainer>
-        ); 
+        const title_metric = use_metric.toUpperCase();
+        const title_period = data.map(item => item.date_year_month)[0];
+        console.log(data)
+        const element = [
+            <div class='row mh-10'>
+                <p class='chart-title '>{title_metric} for {title_period}</p>
+            </div>, 
+            <div class='row mh-90'>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <PieChart>
+                        <Pie
+                        data={data}
+                        color="#000000"
+                        dataKey={`${use_metric}`}
+                        nameKey="sys_type"
+                        cx="50%"
+                        cy="100%"
+                        outerRadius={'200%'}
+                        fill="#8884d8"
+                        labelLine={false}
+                        label={CustomizedLabelChart1}
+                        startAngle={180}
+                        endAngle={0}
+                        //isAnimationActive={false}
+                        >
+                            {data.map((item, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={item.color}
+                                />
+                            ))}
+                        </Pie>
+                        <Legend verticalAlign="top"/>
+                        <Tooltip />
+                        </PieChart>
+                </ResponsiveContainer>         
+            </div> 
+        ]; 
         setChart1(element);
     }
 
@@ -454,6 +466,8 @@ export const Maudaucrr = () => {
         setChart4(element);
     }
     
+    const metric_for_title = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0].toUpperCase()
+
     return (
         <div className="container-fluid h-100">
             <div class="row mh-40">
@@ -477,7 +491,7 @@ export const Maudaucrr = () => {
                 </div>
                 <div class='col col-4 h-100 cobj' >
                     <div class='col obj h-100'>
-                        { chart1 ? chart1 : 'Smth wrong' }
+                        { chart1 ? chart1 : 'Smth wrong' }    
                     </div>
                 </div>
             </div>
