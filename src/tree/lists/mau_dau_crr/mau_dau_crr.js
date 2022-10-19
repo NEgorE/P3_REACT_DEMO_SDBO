@@ -65,6 +65,8 @@ export const Maudaucrr = () => {
 
     const [rb1, setRB1] = useState(false)
     const [currMetric, setCurrMetric] = useState(f_render_metric)
+    const [filter1data, setFilter1data] = useState(false)
+    const [filter1, setFilter1] = useState(false)
     const [kpi1, setKpi1] = useState(false)
     const [kpi2, setKpi2] = useState(false)
     const [chart1, setChart1] = useState(false)
@@ -82,11 +84,19 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         console.log('load data during first render');
+        getFilter1Data();
         getChart2Data();
         getChart3Data();
         getChart1Data();
         genetareRB1(METRICS, f_render_metric);
     }, [])
+
+    useEffect(() => {
+        if(filter1data){
+            console.log(filter1data);
+            generateFilter1(filter1data);
+        }
+    }, [filter1data])
 
     useEffect(() => {
         if(chart1data){
@@ -116,6 +126,18 @@ export const Maudaucrr = () => {
         subscriber.next(currMetric)
     }, [currMetric])
 
+    function getFilter1Data() {
+        let result = false;
+        fetch(`http://localhost:3001/select_filter_cal`)
+          .then(response => {
+            return response.text();
+          })
+          .then(data => {
+            result = JSON.parse(data);
+            setFilter1data(result);
+          });
+    };
+    
     function getChart2Data() {
         let result = false;
         fetch(`http://localhost:3001/select_mau`)
@@ -164,6 +186,24 @@ export const Maudaucrr = () => {
 
     const onChangeMetric = e => {
         setCurrMetric(e.target.value);
+    }
+
+    function generateFilter1(data) {
+        const element =(
+            <div class="row align-items-center h-100 row-rb">
+                <div class="btn-group obj rb" role="group" aria-label="Basic radio toggle button group">
+                    {data.map((el, key) =>(
+                        [
+                            <input type="radio" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
+                                //value={`${el.npp}`} //onChange={onChangeMetric}
+                            />,
+                            <label className="btn btn-outline-primary" htmlFor={`btnf1check ${key}`} >{el.title}</label>,
+                        ]
+                    ))}
+                </div>
+            </div>
+        )
+        setFilter1(element);
     }
 
     function genetareRB1(data, f_render_metric) {
@@ -419,7 +459,9 @@ export const Maudaucrr = () => {
             <div class="row mh-40">
                 <div class='col col-8 h-100'>
                     <div class="row mh-20">
-                        <div class='col col-6'>Filters</div>
+                        <div class='col col-6'>
+                            {filter1 ? filter1 : 'Smth wrong'}
+                        </div>
                         <div class='col col-6 cobj'>
                             {rb1 ? rb1 : 'Smth wrong'}
                         </div>
