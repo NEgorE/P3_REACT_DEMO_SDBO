@@ -7,7 +7,9 @@ import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mau_dau_crr.css";
 
-export const Maudaucrr = () => {
+export const Maudaucrr = (props) => {
+
+    const current_list = props.current_list_name
 
     class CustomizedLabelChart4 extends PureComponent {
         render() {
@@ -59,13 +61,12 @@ export const Maudaucrr = () => {
         );
     };
 
-    //console.log(subscriber);
-
-    const f_render_metric = subscriber._value ? subscriber._value : 'metric1'
+    const f_render_metric = subscriber._value.metrics[current_list] ? subscriber._value.metrics[current_list]  : 'metric1'
+    const f_render_filter = subscriber._value.fil
 
     const [rb1, setRB1] = useState(false)
     const [currMetric, setCurrMetric] = useState(f_render_metric)
-    const [currFilter, setCurrFilter] = useState(false)
+    const [currFilter1, setCurrFilter1] = useState(false)
     const [filter1data, setFilter1data] = useState(false)
     const [filter1, setFilter1] = useState(false)
     const [kpi1, setKpi1] = useState(false)
@@ -90,25 +91,23 @@ export const Maudaucrr = () => {
         getChart3Data();
         getChart1Data();
         genetareRB1(METRICS, f_render_metric);
+        console.log(subscriber._value)
     }, [])
 
     useEffect(() => {
         if(filter1data){
-            //console.log(filter1data);
             generateFilter1(filter1data);
         }
     }, [filter1data])
 
     useEffect(() => {
         if(chart1data){
-            //console.log('render chart 1');
             generateChart1(chart1data, METRICS, currMetric);
         }
     }, [chart1data, currMetric])
 
     useEffect(() => {
         if(chart2data){
-            //console.log('render chart 2, 4 ,kpi 1,2');
             generateChart2(chart2data, METRICS, currMetric);
             generateChart4(chart2data);
             generateKpi1(chart2data, METRICS, currMetric);
@@ -118,15 +117,13 @@ export const Maudaucrr = () => {
 
     useEffect(() => {
         if(chart3data){
-            //console.log('render chart 3');
             generateChart3(chart3data, METRICS, currMetric);
         }
     }, [chart3data, currMetric])
 
     useEffect(() => {
-        console.log(subscriber);
-        console.log(subscriber._value);
-        subscriber.next(currMetric)
+        subscriber.next({metrics: { [current_list] : currMetric}, filters : {}})
+        console.log(subscriber._value)
     }, [currMetric])
 
     function getFilter1Data() {
@@ -192,14 +189,18 @@ export const Maudaucrr = () => {
         setCurrMetric(e.target.value);
     }
 
+    const onChangeFilter1 = e => {
+        
+    }
+
     function generateFilter1(data) {
         const element =(
             <div class="row align-items-center h-100 row-rb">
-                <div class="btn-group obj rb" role="group" aria-label="Basic radio toggle button group">
+                <div class="btn-group obj rb" role="groupf1" aria-label="Basic radio toggle button group">
                     {data.map((el, key) =>(
                         [
-                            <input type="radio" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
-                                //value={`${el.npp}`} //onChange={onChangeMetric}
+                            <input type="checkbox" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
+                                value={`${el.date_yq}`} onChange={onChangeFilter1}
                             />,
                             <label className="btn btn-outline-primary" htmlFor={`btnf1check ${key}`} >{el.date_yq}</label>,
                         ]
@@ -329,7 +330,6 @@ export const Maudaucrr = () => {
         const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
         const title_metric = use_metric.toUpperCase();
         const title_period = data.map(item => item.date_year_month)[0];
-        console.log(data)
         const element = [
             <div class='row mh-10'>
                 <p class='chart-title '>{title_metric} for {title_period}</p>
@@ -369,7 +369,8 @@ export const Maudaucrr = () => {
     }
 
     function generateChart2(data , METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
+        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0];
+        const title_metric = use_metric.toUpperCase();
         if(use_metric === 'mau') {
             var dMin = Math.round((Math.min(...data.map(o => o.mau)) - Math.min(...data.map(o => o.mau))*0.02)/100)*100;
             var dMax = Math.round((Math.max(...data.map(o => o.mau)) + Math.min(...data.map(o => o.mau))*0.02)/100)*100;
@@ -378,58 +379,69 @@ export const Maudaucrr = () => {
             var dMin = Math.round((Math.min(...data.map(o => o.dau)) - Math.min(...data.map(o => o.dau))*0.02)/100)*100;
             var dMax = Math.round((Math.max(...data.map(o => o.dau)) + Math.min(...data.map(o => o.dau))*0.02)/100)*100;
         }
-        const element = (
-            <ResponsiveContainer width={'100%'} height={'100%'}>
-                <LineChart
-                    data={data}
-                    margin={{
-                    top: 5,
-                    right: 30,
-                    left: 10,
-                    bottom: 5,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                    <YAxis domain={[dMin, dMax]} />
-                    <Tooltip />
-                    <Brush dataKey='date_year_month' height={10} />
-                    <Line type="monotone" dataKey={`${use_metric}`} stroke="#4477aa" fill="#4477aa" strokeDasharray="10 5" strokeWidth={2} dot={{ r: 5 }} label={<CustomizedLabelChart2 />} />
-                </LineChart>
-            </ResponsiveContainer>
-        ); 
+        const element = [
+            <div class='row mh-10'>
+                <p class='chart-title '>{title_metric} dynamic</p>
+            </div>, 
+            <div class='row mh-90'>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <LineChart
+                        data={data}
+                        margin={{
+                        top: 5,
+                        right: 30,
+                        left: 10,
+                        bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
+                        <YAxis domain={[dMin, dMax]} />
+                        <Tooltip />
+                        <Brush dataKey='date_year_month' height={10} />
+                        <Line type="monotone" dataKey={`${use_metric}`} stroke="#4477aa" fill="#4477aa" strokeDasharray="10 5" strokeWidth={2} dot={{ r: 5 }} label={<CustomizedLabelChart2 />} />
+                    </LineChart>
+                </ResponsiveContainer>         
+            </div> 
+        ]; 
         setChart2(element);
     }
 
     function generateChart3(data, METRICS, currMetric) {
         const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
+        const title_metric = use_metric.toUpperCase();
         const new_data = [...data.filter(item => item.type === use_metric)]
         const dMin = 0;
-        const element = (
-            <ResponsiveContainer width={'100%'} height={'100%'}>
-                <BarChart
-                    data={new_data}
-                    margin={{
-                    top: 5,
-                    right: 30,
-                    left: 0,
-                    bottom: 5,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                    <YAxis domain={[dMin, (dMax) => (Math.round(dMax))]} type="number" interval={'preserveEnd'} unit='%'/>
-                    <Tooltip />
-                    <Legend verticalAlign="top" />
-                    <Brush dataKey='date_year_month' height={10} />
-                    <Bar dataKey="Mikro" stackId={"a"}  fill="#3a9058" unit={'%'} ><LabelList dataKey="Mikro" position="center" fill="#fff"/></Bar>
-                    <Bar dataKey="Maliy" stackId={"a"}  fill="#301c89"  unit={'%'} ><LabelList dataKey="Maliy" position="center" fill="#fff"/></Bar>
-                    <Bar dataKey="Sredniy" stackId={"a"}  fill="#cd6678"  unit={'%'} ><LabelList dataKey="Sredniy" position="center" fill="#fff"/></Bar>
-                    <Bar dataKey="Krupniy" stackId={"a"}  fill="#decd78"  unit={'%'} ><LabelList dataKey="Krupniy" position="center"/></Bar>
-                    <Bar dataKey="Krupneyshiy" stackId={"a"}  fill="#89cdef"  unit={'%'} ><LabelList dataKey="Krupneyshiy" position="center"/></Bar>
-                </BarChart>
-            </ResponsiveContainer>
-        ); 
+        const element = [
+            <div class='row mh-10'>
+                <p class='chart-title '>{title_metric} segment concentration</p>
+            </div>, 
+            <div class='row mh-90'>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        data={new_data}
+                        margin={{
+                        top: 5,
+                        right: 30,
+                        left: 0,
+                        bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
+                        <YAxis domain={[dMin, (dMax) => (Math.round(dMax))]} type="number" interval={'preserveEnd'} unit='%'/>
+                        <Tooltip />
+                        <Legend verticalAlign="top" />
+                        <Brush dataKey='date_year_month' height={10} />
+                        <Bar dataKey="Mikro" stackId={"a"}  fill="#3a9058" unit={'%'} ><LabelList dataKey="Mikro" position="center" fill="#fff"/></Bar>
+                        <Bar dataKey="Maliy" stackId={"a"}  fill="#301c89"  unit={'%'} ><LabelList dataKey="Maliy" position="center" fill="#fff"/></Bar>
+                        <Bar dataKey="Sredniy" stackId={"a"}  fill="#cd6678"  unit={'%'} ><LabelList dataKey="Sredniy" position="center" fill="#fff"/></Bar>
+                        <Bar dataKey="Krupniy" stackId={"a"}  fill="#decd78"  unit={'%'} ><LabelList dataKey="Krupniy" position="center"/></Bar>
+                        <Bar dataKey="Krupneyshiy" stackId={"a"}  fill="#89cdef"  unit={'%'} ><LabelList dataKey="Krupneyshiy" position="center"/></Bar>
+                    </BarChart>
+                </ResponsiveContainer>       
+            </div> 
+        ];
         setChart3(element);
     }
 
@@ -437,36 +449,39 @@ export const Maudaucrr = () => {
         const dMin = Math.round((Math.min(...data.filter(item => item.crr != null).map(o => o.crr)) - Math.min(...data.filter(item => item.crr != null).map(o => o.crr))*0.02)/10)*10
         const dMax = Math.round((Math.max(...data.filter(item => item.crr != null).map(o => o.crr)) + Math.min(...data.filter(item => item.crr != null).map(o => o.crr))*0.02)/10)*10
         const off = 100 / (dMax + dMin);
-        const element = (
-            <ResponsiveContainer width={'100%'} height={'100%'}>
-                <LineChart
-                    data={data}
-                    margin={{
-                    top: 5,
-                    right: 40,
-                    left: 10,
-                    bottom: 5,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                    <YAxis domain={[dMin, dMax]} unit={"%"}/>
-                    <Tooltip />
-                    <Brush dataKey='date_year_month' height={10} />
-                    <Line dot={<CustomizedDot />} type="monotone" dataKey="crr" stroke="url(#colorCrr)"  strokeDasharray="10 5" strokeWidth={2.5} label={<CustomizedLabelChart4 />} />
-                    <defs>
-                        <linearGradient id="colorCrr" x1="0%" y1="0" x2="0" y2="1">
-                            <stop offset={off} stopColor="green" stopOpacity={1} />
-                            <stop offset={off} stopColor="red" stopOpacity={1} />
-                        </linearGradient>
-                    </defs>
-                </LineChart>
-            </ResponsiveContainer>
-        ); 
+        const element = [
+            <div class='row mh-10'>
+                <p class='chart-title '>CRR dynamic</p>
+            </div>, 
+            <div class='row mh-90'>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <LineChart
+                        data={data}
+                        margin={{
+                        top: 5,
+                        right: 40,
+                        left: 10,
+                        bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
+                        <YAxis domain={[dMin, dMax]} unit={"%"}/>
+                        <Tooltip />
+                        <Brush dataKey='date_year_month' height={10} />
+                        <Line dot={<CustomizedDot />} type="monotone" dataKey="crr" stroke="url(#colorCrr)"  strokeDasharray="10 5" strokeWidth={2.5} label={<CustomizedLabelChart4 />} />
+                        <defs>
+                            <linearGradient id="colorCrr" x1="0%" y1="0" x2="0" y2="1">
+                                <stop offset={off} stopColor="green" stopOpacity={1} />
+                                <stop offset={off} stopColor="red" stopOpacity={1} />
+                            </linearGradient>
+                        </defs>
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+        ]; 
         setChart4(element);
     }
-    
-    const metric_for_title = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0].toUpperCase()
 
     return (
         <div className="container-fluid h-100">

@@ -12,7 +12,7 @@ export const Report = ({numTab}) => {
     return (
         //one day there will be an object :)
         <div className="container-fluid report">
-            {content ? content : 'There is no information about tab N* ' + numTab + ' ' + subscriber._value}
+            {content ? content : 'There is no information about tab N* ' + numTab + ' '}
         </div>
     )
 }
