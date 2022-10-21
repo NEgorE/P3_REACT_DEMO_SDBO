@@ -73,7 +73,7 @@ function selectMauBySystem() {
 function selectFilterCal() {
   return new Promise(function (resolve, reject) {
 
-    const select_q =  'select distinct DATE_MONTH_NAME from dbo.csv_cal';
+    const select_q =  'select distinct date_yq from dbo.csv_cal where date_year >= 2021 order by 1';
 
     pool.query(select_q, (error, results) => {
       if (error) {

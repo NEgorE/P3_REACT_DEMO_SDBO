@@ -1,14 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 
-const subscriber = new BehaviorSubject(0);
+const subscriberMetric1 = new BehaviorSubject(0);
 
-const messageService = {
-    send : function(msg) {
-        subscriber.next(msg)
-    }
-}
+const subscriberFilter1 = new BehaviorSubject(0);
+
 
 export {
-    subscriber,
-    messageService
+    subscriberMetric1,
+    subscriberFilter1
 }
