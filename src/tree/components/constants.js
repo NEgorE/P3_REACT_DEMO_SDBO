@@ -1,4 +1,4 @@
-import {Maudaucrr} from '../../lists/mau_dau_crr/mau_dau_crr.js';
+import {Maudaucrr} from '../lists/mau_dau_crr/mau_dau_crr.js';
 
 export const TABS = [
     {title: 'MAU/DAU/CRR', type: 1, obj: <Maudaucrr current_list_name='maudaucrr'/>},
@@ -6,3 +6,8 @@ export const TABS = [
     {title: 'Sessions', type: 3},
     {title: 'Add next tab...', type: 4},
   ]
+
+export const METRICS = [
+    { npp: 'metric1', title: 'MAU', value: 'mau'},
+    { npp: 'metric2', title: 'DAU', value: 'dau'},
+]

@@ -1,7 +1,10 @@
 import React, { PureComponent, useEffect, useState } from "react";
 import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { Chart4 } from './chart4.js';
-import { Chart3 } from './chart4.js';
+import { Chart3 } from './chart3.js';
+import { Chart2 } from './chart2.js';
+import { Chart1 } from './chart1.js';
+import { METRICS } from '../../components/constants';
 
 import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
 
@@ -10,31 +13,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./mau_dau_crr.css";
 
 export const Maudaucrr = (props) => {
-
-    const current_list = props.current_list_name
-
-    class CustomizedLabelChart2 extends PureComponent {
-        render() {
-            const { x, y, value, index} = this.props;
-            return (
-                    <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
-            )
-        }
-    };
-
-    const RADIAN = Math.PI / 180;
-    const CustomizedLabelChart1 = (props) => {
-        const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN) + 7;
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text x={x} y={y} fill="white" textAnchor={'middle'} dominantBaseline="central">
-                {`${value} (${(percent * 100).toFixed(1)}%)`}
-            </text>
-        );
-    };
 
     const f_render_metric = subscriberMetric1._value ? subscriberMetric1._value : 'metric1'
 
@@ -45,24 +23,12 @@ export const Maudaucrr = (props) => {
     const [filter1, setFilter1] = useState(false)
     const [kpi1, setKpi1] = useState(false)
     const [kpi2, setKpi2] = useState(false)
-    const [chart1, setChart1] = useState(false)
-    const [chart1data, setchart1data] = useState(false)
-    const [chart2, setChart2] = useState(false)
     const [chart2data, setchart2data] = useState(false)
-    const [chart3, setChart3] = useState(false)
-    const [chart3data, setchart3data] = useState(false)
-
-    const METRICS = [
-        { npp: 'metric1', title: 'MAU', value: 'mau'},
-        { npp: 'metric2', title: 'DAU', value: 'dau'},
-    ]
 
     useEffect(() => {
         console.log('load data during first render');
         getFilter1Data();
         getChart2Data();
-        getChart3Data();
-        getChart1Data();
         genetareRB1(METRICS, f_render_metric);
         console.log(subscriberMetric1._value)
     }, [])
@@ -74,24 +40,11 @@ export const Maudaucrr = (props) => {
     }, [filter1data])
 
     useEffect(() => {
-        if(chart1data){
-            generateChart1(chart1data, METRICS, currMetric);
-        }
-    }, [chart1data, currMetric])
-
-    useEffect(() => {
         if(chart2data){
-            generateChart2(chart2data, METRICS, currMetric);
             generateKpi1(chart2data, METRICS, currMetric);
             generateKpi2(chart2data, METRICS, currMetric);
         }
     }, [chart2data, currMetric])
-
-    useEffect(() => {
-        if(chart3data){
-            generateChart3(chart3data, METRICS, currMetric);
-        }
-    }, [chart3data, currMetric])
 
     useEffect(() => {
         subscriberMetric1.next(currMetric)
@@ -126,41 +79,6 @@ export const Maudaucrr = (props) => {
             setchart2data(result);
           });
     };
-
-    function getChart3Data() {
-        let result = false;
-        fetch(`http://localhost:3001/select_mau_by_segment`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart3data(result);
-          });
-    };
-
-    function getChart1Data() {
-        let result = false;
-        const resultArr = [];
-        fetch(`http://localhost:3001/select_mau_by_system`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            for (let i = 0; i < result.length; i++) {
-                const currentResult = result[i]
-                let result2 = {};
-                result2.sys_type = currentResult.sys_type
-                result2.mau = parseInt(currentResult.mau)
-                result2.dau = parseInt(currentResult.dau)
-                result2.color = currentResult.color
-                result2.date_year_month = currentResult.date_year_month
-                resultArr.push(result2)
-            }
-            setchart1data(resultArr);
-          });
-    }
 
     const onChangeMetric = e => {
         setCurrMetric(e.target.value);
@@ -304,125 +222,6 @@ export const Maudaucrr = (props) => {
         setKpi2(element)
     }
 
-    function generateChart1(data, METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
-        const title_metric = use_metric.toUpperCase();
-        const title_period = data.map(item => item.date_year_month)[0];
-        const element = [
-            <div class='row mh-10'>
-                <p class='chart-title '>{title_metric} for {title_period}</p>
-            </div>, 
-            <div class='row mh-90'>
-                <ResponsiveContainer width={'100%'} height={'100%'}>
-                    <PieChart>
-                        <Pie
-                        data={data}
-                        color="#000000"
-                        dataKey={`${use_metric}`}
-                        nameKey="sys_type"
-                        cx="50%"
-                        cy="100%"
-                        outerRadius={'200%'}
-                        fill="#8884d8"
-                        labelLine={false}
-                        label={CustomizedLabelChart1}
-                        startAngle={180}
-                        endAngle={0}
-                        //isAnimationActive={false}
-                        >
-                            {data.map((item, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={item.color}
-                                />
-                            ))}
-                        </Pie>
-                        <Legend verticalAlign="top"/>
-                        <Tooltip />
-                        </PieChart>
-                </ResponsiveContainer>         
-            </div> 
-        ]; 
-        setChart1(element);
-    }
-
-    function generateChart2(data , METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0];
-        const title_metric = use_metric.toUpperCase();
-        if(use_metric === 'mau') {
-            var dMin = Math.round((Math.min(...data.map(o => o.mau)) - Math.min(...data.map(o => o.mau))*0.02)/100)*100;
-            var dMax = Math.round((Math.max(...data.map(o => o.mau)) + Math.min(...data.map(o => o.mau))*0.02)/100)*100;
-        }
-        else {
-            var dMin = Math.round((Math.min(...data.map(o => o.dau)) - Math.min(...data.map(o => o.dau))*0.02)/100)*100;
-            var dMax = Math.round((Math.max(...data.map(o => o.dau)) + Math.min(...data.map(o => o.dau))*0.02)/100)*100;
-        }
-        const element = [
-            <div class='row mh-10'>
-                <p class='chart-title '>{title_metric} dynamic</p>
-            </div>, 
-            <div class='row mh-90'>
-                <ResponsiveContainer width={'100%'} height={'100%'}>
-                    <LineChart
-                        data={data}
-                        margin={{
-                        top: 5,
-                        right: 30,
-                        left: 10,
-                        bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                        <YAxis domain={[dMin, dMax]} />
-                        <Tooltip />
-                        <Brush dataKey='date_year_month' height={10} />
-                        <Line type="monotone" dataKey={`${use_metric}`} stroke="#4477aa" fill="#4477aa" strokeDasharray="10 5" strokeWidth={2} dot={{ r: 5 }} label={<CustomizedLabelChart2 />} />
-                    </LineChart>
-                </ResponsiveContainer>         
-            </div> 
-        ]; 
-        setChart2(element);
-    }
-
-    function generateChart3(data, METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
-        const title_metric = use_metric.toUpperCase();
-        const new_data = [...data.filter(item => item.type === use_metric)]
-        const dMin = 0;
-        const element = [
-            <div class='row mh-10'>
-                <p class='chart-title '>{title_metric} segment concentration</p>
-            </div>, 
-            <div class='row mh-90'>
-                <ResponsiveContainer width={'100%'} height={'100%'}>
-                    <BarChart
-                        data={new_data}
-                        margin={{
-                        top: 5,
-                        right: 30,
-                        left: 0,
-                        bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                        <YAxis domain={[dMin, (dMax) => (Math.round(dMax))]} type="number" interval={'preserveEnd'} unit='%'/>
-                        <Tooltip />
-                        <Legend verticalAlign="top" />
-                        <Brush dataKey='date_year_month' height={10} />
-                        <Bar dataKey="Mikro" stackId={"a"}  fill="#3a9058" unit={'%'} ><LabelList dataKey="Mikro" position="center" fill="#fff"/></Bar>
-                        <Bar dataKey="Maliy" stackId={"a"}  fill="#301c89"  unit={'%'} ><LabelList dataKey="Maliy" position="center" fill="#fff"/></Bar>
-                        <Bar dataKey="Sredniy" stackId={"a"}  fill="#cd6678"  unit={'%'} ><LabelList dataKey="Sredniy" position="center" fill="#fff"/></Bar>
-                        <Bar dataKey="Krupniy" stackId={"a"}  fill="#decd78"  unit={'%'} ><LabelList dataKey="Krupniy" position="center"/></Bar>
-                        <Bar dataKey="Krupneyshiy" stackId={"a"}  fill="#89cdef"  unit={'%'} ><LabelList dataKey="Krupneyshiy" position="center"/></Bar>
-                    </BarChart>
-                </ResponsiveContainer>       
-            </div> 
-        ];
-        setChart3(element);
-    }
-
     return (
         <div className="container-fluid h-100">
             <div class="row mh-40">
@@ -446,14 +245,14 @@ export const Maudaucrr = (props) => {
                 </div>
                 <div class='col col-4 h-100 cobj' >
                     <div class='col obj h-100'>
-                        { chart1 ? chart1 : 'Smth wrong' }    
+                        <Chart1 />  
                     </div>
                 </div>
             </div>
             <div class="row mh-60">
                 <div class='col col-4 h-100 cobj' >
                     <div class='col obj h-100'>
-                        { chart2 ? chart2 : 'Smth wrong' }
+                        <Chart2 />
                     </div>
                 </div>
                 <div class='col col-4 h-100 cobj'>

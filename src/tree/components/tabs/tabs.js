@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react"
 import classnames from "classnames"
-import {TABS} from './constants';
+import {TABS} from '../constants.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./tabs.css";

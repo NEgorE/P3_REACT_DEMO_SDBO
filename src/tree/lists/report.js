@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import {TABS} from '../components/tabs/constants';
+import {TABS} from '../components/constants';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./report.css";

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { Chart4 } from './chart4.js';
+import { subscriberMetric1 } from '../../../MessageService.js';
+import { METRICS } from '../../components/constants';
 
-import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList } from 'recharts';
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mau_dau_crr.css";
 
-export const Chart3 = () => {
+export const Chart3 = (props) => {
 
     const log_prefix = 'CHART3: '
+
+    const currMetric = subscriberMetric1._value
 
     const [chart3, setChart3] = useState(false)
     const [chart3data, setchart3data] = useState(false)
@@ -24,7 +26,7 @@ export const Chart3 = () => {
         if(chart3data){
             generateChart3(chart3data, METRICS, currMetric);
         }
-    }, [chart3data])
+    }, [chart3data, currMetric])
 
     function getChart3Data() {
         let result = false;
@@ -77,6 +79,6 @@ export const Chart3 = () => {
     }
 
     return (
-        hart3 ? chart3 : 'Smth wrong'
+        chart3 ? chart3 : 'Smth wrong'
     )
 }

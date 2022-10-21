@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import {Tabs} from './tree/components/tabs/tabs.js';
-import {TABS} from './tree/components/tabs/constants';
+import {TABS} from './tree/components/constants';
 import {Report} from './tree/lists/report.js';
 
 import { subscriberMetric1 } from './MessageService.js';
