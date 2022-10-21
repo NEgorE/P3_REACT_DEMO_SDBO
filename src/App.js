@@ -4,13 +4,13 @@ import {Tabs} from './tree/components/tabs/tabs.js';
 import {TABS} from './tree/components/tabs/constants';
 import {Report} from './tree/lists/report.js';
 
-import { subscriber, messageService } from './MessageService.js';
+import { subscriberMetric1 } from './MessageService.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
 console.log('setsubscriber')
-subscriber.next({metrics: {}, filters : {}})
+subscriberMetric1.next()
 
 
 function App() {

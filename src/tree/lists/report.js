@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
 import {TABS} from '../components/tabs/constants';
-import { subscriber, messageService } from '../../MessageService.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./report.css";

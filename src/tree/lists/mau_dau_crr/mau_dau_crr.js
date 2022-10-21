@@ -1,5 +1,7 @@
 import React, { PureComponent, useEffect, useState } from "react";
-import { subscriber, messageService } from '../../../MessageService.js';
+import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
+import { Chart4 } from './chart4.js';
+import { Chart3 } from './chart4.js';
 
 import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
 
@@ -11,14 +13,6 @@ export const Maudaucrr = (props) => {
 
     const current_list = props.current_list_name
 
-    class CustomizedLabelChart4 extends PureComponent {
-        render() {
-            const { x, y, value, index} = this.props;
-            return (
-                    <text x={x+25} y={y+6} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
-            )
-        }
-    };
     class CustomizedLabelChart2 extends PureComponent {
         render() {
             const { x, y, value, index} = this.props;
@@ -26,25 +20,6 @@ export const Maudaucrr = (props) => {
                     <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
             )
         }
-    };
-    const CustomizedDot = (props) => {
-        const { cx, cy, value } = props;
-      
-        if (value === null) {
-            return null
-        }
-        if (value >= 100) {
-          return (
-            <svg x={cx-5} y={cy-5} width={10} height={10} >
-                <circle cx="5" cy="5" r="5" strokeWidth="3" fill="green" />
-            </svg>
-          );
-        }
-        return (
-            <svg x={cx-5} y={cy-5} width={10} height={10} >
-                <circle cx="5" cy="5" r="5" strokeWidth="3" fill="red" />
-            </svg>
-        );
     };
 
     const RADIAN = Math.PI / 180;
@@ -61,8 +36,7 @@ export const Maudaucrr = (props) => {
         );
     };
 
-    const f_render_metric = subscriber._value.metrics[current_list] ? subscriber._value.metrics[current_list]  : 'metric1'
-    const f_render_filter = subscriber._value.fil
+    const f_render_metric = subscriberMetric1._value ? subscriberMetric1._value : 'metric1'
 
     const [rb1, setRB1] = useState(false)
     const [currMetric, setCurrMetric] = useState(f_render_metric)
@@ -74,7 +48,6 @@ export const Maudaucrr = (props) => {
     const [chart1, setChart1] = useState(false)
     const [chart1data, setchart1data] = useState(false)
     const [chart2, setChart2] = useState(false)
-    const [chart4, setChart4] = useState(false)
     const [chart2data, setchart2data] = useState(false)
     const [chart3, setChart3] = useState(false)
     const [chart3data, setchart3data] = useState(false)
@@ -91,7 +64,7 @@ export const Maudaucrr = (props) => {
         getChart3Data();
         getChart1Data();
         genetareRB1(METRICS, f_render_metric);
-        console.log(subscriber._value)
+        console.log(subscriberMetric1._value)
     }, [])
 
     useEffect(() => {
@@ -109,7 +82,6 @@ export const Maudaucrr = (props) => {
     useEffect(() => {
         if(chart2data){
             generateChart2(chart2data, METRICS, currMetric);
-            generateChart4(chart2data);
             generateKpi1(chart2data, METRICS, currMetric);
             generateKpi2(chart2data, METRICS, currMetric);
         }
@@ -122,9 +94,14 @@ export const Maudaucrr = (props) => {
     }, [chart3data, currMetric])
 
     useEffect(() => {
-        subscriber.next({metrics: { [current_list] : currMetric}, filters : {}})
-        console.log(subscriber._value)
+        subscriberMetric1.next(currMetric)
+        console.log(subscriberMetric1._value)
     }, [currMetric])
+
+    useEffect(() => {
+        subscriberFilter1.next(currFilter1)
+        console.log(subscriberFilter1._value)
+    }, [currFilter1])
 
     function getFilter1Data() {
         let result = false;
@@ -190,7 +167,8 @@ export const Maudaucrr = (props) => {
     }
 
     const onChangeFilter1 = e => {
-        
+        const { value, checked } = e.target;
+        setCurrFilter1(value);
     }
 
     function generateFilter1(data) {
@@ -445,44 +423,6 @@ export const Maudaucrr = (props) => {
         setChart3(element);
     }
 
-    function generateChart4(data) {
-        const dMin = Math.round((Math.min(...data.filter(item => item.crr != null).map(o => o.crr)) - Math.min(...data.filter(item => item.crr != null).map(o => o.crr))*0.02)/10)*10
-        const dMax = Math.round((Math.max(...data.filter(item => item.crr != null).map(o => o.crr)) + Math.min(...data.filter(item => item.crr != null).map(o => o.crr))*0.02)/10)*10
-        const off = 100 / (dMax + dMin);
-        const element = [
-            <div class='row mh-10'>
-                <p class='chart-title '>CRR dynamic</p>
-            </div>, 
-            <div class='row mh-90'>
-                <ResponsiveContainer width={'100%'} height={'100%'}>
-                    <LineChart
-                        data={data}
-                        margin={{
-                        top: 5,
-                        right: 40,
-                        left: 10,
-                        bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date_year_month" angle={-25} interval={0} tickSize={11} height={40}/>
-                        <YAxis domain={[dMin, dMax]} unit={"%"}/>
-                        <Tooltip />
-                        <Brush dataKey='date_year_month' height={10} />
-                        <Line dot={<CustomizedDot />} type="monotone" dataKey="crr" stroke="url(#colorCrr)"  strokeDasharray="10 5" strokeWidth={2.5} label={<CustomizedLabelChart4 />} />
-                        <defs>
-                            <linearGradient id="colorCrr" x1="0%" y1="0" x2="0" y2="1">
-                                <stop offset={off} stopColor="green" stopOpacity={1} />
-                                <stop offset={off} stopColor="red" stopOpacity={1} />
-                            </linearGradient>
-                        </defs>
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
-        ]; 
-        setChart4(element);
-    }
-
     return (
         <div className="container-fluid h-100">
             <div class="row mh-40">
@@ -518,12 +458,12 @@ export const Maudaucrr = (props) => {
                 </div>
                 <div class='col col-4 h-100 cobj'>
                     <div class='col obj h-100'>
-                        { chart3 ? chart3 : 'Smth wrong' }
+                        <Chart3 />
                     </div>
                 </div>
                 <div class='col col-4 h-100 cobj' >
                     <div class='col obj h-100'>
-                        { chart4 ? chart4 : 'Smth wrong' }
+                        <Chart4 />
                     </div>
                 </div>
             </div>
