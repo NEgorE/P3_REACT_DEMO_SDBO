@@ -1,10 +1,8 @@
-import React, { PureComponent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { Chart4 } from './chart4.js';
-import { Chart3 } from './chart3.js';
 import { METRICS } from '../../components/constants';
 
-import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,21 +13,20 @@ export const Chart2 = (props) => {
     const log_prefix = 'CHART2: '
 
     const currMetric = subscriberMetric1._value
+    const currFilter1 = subscriberFilter1._value
 
-    class CustomizedLabelChart2 extends PureComponent {
-        render() {
-            const { x, y, value, index} = this.props;
-            return (
-                    <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
-            )
-        }
+    const CustomizedLabelChart2 = (props) => {
+        const { x, y, value, index} = props;
+        return (
+            <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
+        )
     };
 
     const [chart2, setChart2] = useState(false)
     const [chart2data, setchart2data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
+        console.log(log_prefix + currFilter1);
         getChart2Data();
     }, [])
 
@@ -37,18 +34,38 @@ export const Chart2 = (props) => {
         if(chart2data){
             generateChart2(chart2data, METRICS, currMetric);
         }
-    }, [chart2data, currMetric])
+    }, [chart2data])
+
+    useEffect(() => {
+        getChart2Data();
+    }, [currFilter1, currMetric])
     
     function getChart2Data() {
         let result = false;
-        fetch(`http://localhost:3001/select_mau`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart2data(result);
-          });
+        console.log(log_prefix + currFilter1.length + ' length filter');
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_filters/filter1=[${currFilter1}]`
+            console.log(log_prefix + query);
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
+        }
+        
     };
 
     function generateChart2(data , METRICS, currMetric) {

@@ -32,6 +32,16 @@ app.get('/select_merchants/:count_sel', (req, res) => {
   })
 })
 
+app.get('/select_mau_by_filters/:currFilter1', (req, res) => {
+  select_model.selectMauByFilters(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
 app.get('/select_mau/', (req, res) => {
   select_model.selectMau()
   .then(response => {
