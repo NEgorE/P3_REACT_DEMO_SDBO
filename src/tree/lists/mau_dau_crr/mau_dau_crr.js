@@ -13,8 +13,6 @@ import "./mau_dau_crr.css"
 
 export const Maudaucrr = (props) => {
 
-    const log_prefix = 'MAUDAUCRR: '
-
     const [container, setContainer] = useState(false)
 
     useEffect(() => {

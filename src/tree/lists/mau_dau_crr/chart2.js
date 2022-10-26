@@ -1,10 +1,8 @@
-import React, { PureComponent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { Chart4 } from './chart4.js';
-import { Chart3 } from './chart3.js';
 import { METRICS } from '../../components/constants';
 
-import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList, PieChart, Pie, Cell, Label  } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
 
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -28,7 +26,7 @@ export const Chart2 = (props) => {
     const [chart2data, setchart2data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
+        console.log(log_prefix + currFilter1);
         getChart2Data();
     }, [])
 
@@ -46,7 +44,7 @@ export const Chart2 = (props) => {
         let result = false;
         console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
-            fetch(`http://localhost:3001/select_mau_with_filters`)
+            fetch(`http://localhost:3001/select_mau`)
             .then(response => {
                 return response.text();
             })
@@ -56,7 +54,16 @@ export const Chart2 = (props) => {
             });
         }
         else {
-            setchart2data([]);
+            const query = `http://localhost:3001/select_mau_by_filters/filter1=[${currFilter1}]`
+            console.log(log_prefix + query);
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
         }
         
     };

@@ -42,6 +42,23 @@ function selectMau() {
   });
 }
 
+function selectMauByFilters(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    console.log('currFilter1: ' + currFilter1)
+    console.log('currFilter1 array: ' + currFilter1.split(','))
+
+    const select_q =  'select * from dbo.monthly_data_mart order by 1 asc';
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 function selectMauBySegment() {
   return new Promise(function (resolve, reject) {
 
@@ -90,5 +107,6 @@ module.exports = {
     selectMau,
     selectFilterCal,
     selectMauBySegment,
-    selectMauBySystem
+    selectMauBySystem,
+    selectMauByFilters
   }
