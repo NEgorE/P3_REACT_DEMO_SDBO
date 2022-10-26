@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 } from '../../../MessageService.js';
+import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
 import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell  } from 'recharts';
@@ -13,6 +13,7 @@ export const Chart1 = (props) => {
     const log_prefix = 'CHART1: '
 
     const currMetric = subscriberMetric1._value
+    const currFilter = subscriberFilter1._value
     const RADIAN = Math.PI / 180;
     const CustomizedLabelChart1 = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
@@ -43,6 +44,10 @@ export const Chart1 = (props) => {
 
     function getChart1Data() {
         let result = false;
+        if (currFilter.length <=0 || !currFilter) {
+            console.log(log_prefix + 'reload data for ch1');
+            console.log(log_prefix + currFilter.length)
+        }
         const resultArr = [];
         fetch(`http://localhost:3001/select_mau_by_system`)
           .then(response => {

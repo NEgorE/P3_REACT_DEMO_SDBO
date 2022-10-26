@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { subscriberMetric1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
+import { Maudaucrr } from "./mau_dau_crr.js";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mau_dau_crr.css";
 
 
 export const RB1 = (props) => {
+
+    const { renderCharts } = props
 
     const log_prefix = 'RB1: '
 
@@ -23,6 +27,7 @@ export const RB1 = (props) => {
     useEffect(() => {
         subscriberMetric1.next(currMetric)
         console.log(log_prefix + ' sub value ' + subscriberMetric1._value);
+        renderCharts();
     }, [currMetric])
 
     const onChangeMetric = e => {

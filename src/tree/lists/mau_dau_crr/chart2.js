@@ -15,14 +15,13 @@ export const Chart2 = (props) => {
     const log_prefix = 'CHART2: '
 
     const currMetric = subscriberMetric1._value
+    const currFilter1 = subscriberFilter1._value
 
-    class CustomizedLabelChart2 extends PureComponent {
-        render() {
-            const { x, y, value, index} = this.props;
-            return (
-                    <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
-            )
-        }
+    const CustomizedLabelChart2 = (props) => {
+        const { x, y, value, index} = props;
+        return (
+            <text x={x} y={y-5} textAnchor="middle" value={value} id={`Chart2_index${index}`} >{value} </text>
+        )
     };
 
     const [chart2, setChart2] = useState(false)
@@ -37,18 +36,29 @@ export const Chart2 = (props) => {
         if(chart2data){
             generateChart2(chart2data, METRICS, currMetric);
         }
-    }, [chart2data, currMetric])
+    }, [chart2data])
+
+    useEffect(() => {
+        getChart2Data();
+    }, [currFilter1, currMetric])
     
     function getChart2Data() {
         let result = false;
-        fetch(`http://localhost:3001/select_mau`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart2data(result);
-          });
+        console.log(log_prefix + currFilter1.length + ' length filter');
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau_with_filters`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
+        }
+        else {
+            setchart2data([]);
+        }
+        
     };
 
     function generateChart2(data , METRICS, currMetric) {
