@@ -45,12 +45,10 @@ function selectMau() {
 function selectMauByFilters(currFilter1) {
   return new Promise(function (resolve, reject) {
 
-    console.log('currFilter1: ' + currFilter1)
-    console.log('currFilter1 array: ' + currFilter1.split(','))
+    const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+    const select_q_with_param =  `select * from dbo.monthly_data_mart where date_yq in (${currFilter1_array2}) order by 1 asc `;
 
-    const select_q =  'select * from dbo.monthly_data_mart order by 1 asc';
-
-    pool.query(select_q, (error, results) => {
+    pool.query(select_q_with_param, (error, results) => {
       if (error) {
         reject('Some error')
       }

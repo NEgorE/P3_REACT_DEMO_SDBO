@@ -54,7 +54,7 @@ export const Chart2 = (props) => {
             });
         }
         else {
-            const query = `http://localhost:3001/select_mau_by_filters/filter1=[${currFilter1}]`
+            const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
             console.log(log_prefix + query);
             fetch(query)
             .then(response => {
@@ -65,7 +65,6 @@ export const Chart2 = (props) => {
                 setchart2data(result);
             });
         }
-        
     };
 
     function generateChart2(data , METRICS, currMetric) {
