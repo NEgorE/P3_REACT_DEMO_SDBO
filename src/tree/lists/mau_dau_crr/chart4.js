@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { subscriberFilter1 } from '../../../MessageService.js';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Brush } from 'recharts';
 
@@ -7,7 +8,9 @@ import "./mau_dau_crr.css";
 
 export const Chart4 = () => {
 
-    const log_prefix = 'CHART4: '
+    const log_prefix = 'CHART4: ';
+
+    const currFilter1 = subscriberFilter1._value;
 
     const CustomizedLabelChart4 = (props) => {
         const { x, y, value, index} = props;
@@ -52,18 +55,36 @@ export const Chart4 = () => {
             generateChart4(chart4data);
         }
     }, [chart4data] )
+
+    useEffect(() => {
+        getchart4data();
+    }, [currFilter1])
     
     function getchart4data() {
-        console.log(log_prefix + 'get data');
         let result = false;
-        fetch(`http://localhost:3001/select_mau`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart4data(result);
-          });
+        console.log(log_prefix + currFilter1.length + ' length filter');
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart4data(result);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
+            console.log(log_prefix + query);
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart4data(result);
+            });
+        }
     };
 
     function generateChart4(data) {

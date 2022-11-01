@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 } from '../../../MessageService.js';
+import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,6 +10,7 @@ export const Kpi2 = (props) => {
     const log_prefix = 'KPI2: '
 
     const currMetric = subscriberMetric1._value
+    const currFilter1 = subscriberFilter1._value
 
     const [kpi2, setKpi2] = useState(false)
     const [chart2data, setchart2data] = useState(false)
@@ -23,18 +24,37 @@ export const Kpi2 = (props) => {
         if(chart2data){
             generateKpi2(chart2data, METRICS, currMetric);
         }
-    }, [chart2data, currMetric])
+    }, [chart2data])
+
+    useEffect(() => {
+        getChart2Data();
+    }, [currFilter1, currMetric])
     
     function getChart2Data() {
         let result = false;
-        fetch(`http://localhost:3001/select_mau`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart2data(result);
-          });
+        console.log(log_prefix + currFilter1.length + ' length filter');
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
+            console.log(log_prefix + query);
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart2data(result);
+            });
+        }
     };
 
     function generateKpi2(data, METRICS, currMetric) {

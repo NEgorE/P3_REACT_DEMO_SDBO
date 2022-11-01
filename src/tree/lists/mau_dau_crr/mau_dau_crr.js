@@ -25,7 +25,7 @@ export const Maudaucrr = (props) => {
                 <div class="row mh-40">
                     <div class='col col-8 h-100'>
                         <div class="row mh-20">
-                            <div class='col col-6'>
+                            <div class='col col-6 cobj'>
                                 <Filter1 renderCharts={() => renderCharts()} />
                             </div>
                             <div class='col col-6 cobj'>

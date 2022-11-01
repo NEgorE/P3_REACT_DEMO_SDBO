@@ -13,7 +13,8 @@ export const Chart1 = (props) => {
     const log_prefix = 'CHART1: '
 
     const currMetric = subscriberMetric1._value
-    const currFilter = subscriberFilter1._value
+    const currFilter1 = subscriberFilter1._value
+
     const RADIAN = Math.PI / 180;
     const CustomizedLabelChart1 = (props) => {
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
@@ -40,33 +41,56 @@ export const Chart1 = (props) => {
         if(chart1data){
             generateChart1(chart1data, METRICS, currMetric);
         }
-    }, [chart1data, currMetric])
+    }, [chart1data])
+
+    useEffect(() => {
+        getChart1Data();
+    }, [currFilter1, currMetric])
 
     function getChart1Data() {
         let result = false;
-        if (currFilter.length <=0 || !currFilter) {
-            console.log(log_prefix + 'reload data for ch1');
-            console.log(log_prefix + currFilter.length)
-        }
         const resultArr = [];
-        fetch(`http://localhost:3001/select_mau_by_system`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            for (let i = 0; i < result.length; i++) {
-                const currentResult = result[i]
-                let result2 = {};
-                result2.sys_type = currentResult.sys_type
-                result2.mau = parseInt(currentResult.mau)
-                result2.dau = parseInt(currentResult.dau)
-                result2.color = currentResult.color
-                result2.date_year_month = currentResult.date_year_month
-                resultArr.push(result2)
-            }
-            setchart1data(resultArr);
-          });
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau_by_system`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                for (let i = 0; i < result.length; i++) {
+                    const currentResult = result[i]
+                    let result2 = {};
+                    result2.sys_type = currentResult.sys_type
+                    result2.mau = parseInt(currentResult.mau)
+                    result2.dau = parseInt(currentResult.dau)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
+                    resultArr.push(result2)
+                }
+                setchart1data(resultArr);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_system_by_filters/filter1=${currFilter1}`
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                for (let i = 0; i < result.length; i++) {
+                    const currentResult = result[i]
+                    let result2 = {};
+                    result2.sys_type = currentResult.sys_type
+                    result2.mau = parseInt(currentResult.mau)
+                    result2.dau = parseInt(currentResult.dau)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
+                    resultArr.push(result2)
+                }
+                setchart1data(resultArr);
+            });
+        }
     }
 
     function generateChart1(data, METRICS, currMetric) {

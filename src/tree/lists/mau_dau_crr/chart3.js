@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 } from '../../../MessageService.js';
+import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList } from 'recharts';
@@ -13,6 +13,7 @@ export const Chart3 = (props) => {
     const log_prefix = 'CHART3: '
 
     const currMetric = subscriberMetric1._value
+    const currFilter1 = subscriberFilter1._value
 
     const [chart3, setChart3] = useState(false)
     const [chart3data, setchart3data] = useState(false)
@@ -26,18 +27,35 @@ export const Chart3 = (props) => {
         if(chart3data){
             generateChart3(chart3data, METRICS, currMetric);
         }
-    }, [chart3data, currMetric])
+    }, [chart3data])
+
+    useEffect(() => {
+        getChart3Data();
+    }, [currFilter1, currMetric])
 
     function getChart3Data() {
         let result = false;
-        fetch(`http://localhost:3001/select_mau_by_segment`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            setchart3data(result);
-          });
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau_by_segment`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart3data(result);
+            })
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_segment_by_filters/filter1=${currFilter1}`
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                setchart3data(result);
+            })
+        }
     };
 
     function generateChart3(data, METRICS, currMetric) {
