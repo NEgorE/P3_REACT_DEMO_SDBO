@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import { subscriberMetric1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
-import { Maudaucrr } from "./mau_dau_crr.js";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
-
 export const RB1 = (props) => {
 
     const { renderCharts } = props

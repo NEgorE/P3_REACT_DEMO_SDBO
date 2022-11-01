@@ -3,9 +3,6 @@ import { subscriberFilter1 } from '../../../MessageService.js';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Brush } from 'recharts';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
 export const Chart4 = () => {
 
     const log_prefix = 'CHART4: ';

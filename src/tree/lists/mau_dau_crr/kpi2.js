@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
 export const Kpi2 = (props) => {
 
     const log_prefix = 'KPI2: '

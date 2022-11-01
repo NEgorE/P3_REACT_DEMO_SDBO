@@ -4,10 +4,6 @@ import { METRICS } from '../../components/constants';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
 
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
 export const Chart2 = (props) => {
 
     const log_prefix = 'CHART2: '

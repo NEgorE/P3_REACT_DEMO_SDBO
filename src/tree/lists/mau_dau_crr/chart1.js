@@ -4,10 +4,6 @@ import { METRICS } from '../../components/constants';
 
 import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell  } from 'recharts';
 
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
 export const Chart1 = (props) => {
 
     const log_prefix = 'CHART1: '
