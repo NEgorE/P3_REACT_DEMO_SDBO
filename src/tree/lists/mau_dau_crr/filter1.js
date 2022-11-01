@@ -7,13 +7,14 @@ export const Filter1 = (props) => {
 
     const log_prefix = 'Filter1: '
 
+    const currFilter1 = subscriberFilter1._value
+
     const [filter1data, setFilter1data] = useState(false)
     const [filter1, setFilter1] = useState(false)
 
     useEffect(() => {
         console.log(log_prefix + 'load data during first render');
         getFilter1Data();
-        subscriberFilter1.next([])
     }, [])
 
     useEffect(() => {
@@ -51,11 +52,18 @@ export const Filter1 = (props) => {
     }
 
     function generateFilter1(data) {
+        console.log(currFilter1)
         const element =(
             <div class="row align-items-center h-100 row-rb">
                 <div class="btn-group obj rb" role="groupf1" aria-label="Basic radio toggle button group">
                     {data.map((el, key) =>(
+                        console.log(currFilter1.indexOf(`${el.date_yq}`)),
                         [
+                            currFilter1.indexOf(el.date_yq) >= 0 ? 
+                            <input type="checkbox" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
+                                value={`${el.date_yq}`} onChange={onChangeFilter1} defaultChecked={true}
+                            />
+                            :
                             <input type="checkbox" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
                                 value={`${el.date_yq}`} onChange={onChangeFilter1}
                             />,

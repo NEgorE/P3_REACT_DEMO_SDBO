@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {Tabs} from './tree/components/tabs/tabs.js';
 import {TABS} from './tree/components/constants';
 import {Report} from './tree/lists/report.js';
+import { subscriberFilter1 } from './MessageService.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
