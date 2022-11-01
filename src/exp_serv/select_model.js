@@ -71,12 +71,43 @@ function selectMauBySegment() {
   });
 }
 
+function selectMauBySegmentByFilters(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+    const select_q_with_param =  `select * from dbo.monthly_data_mart_by_segment_3 where date_yq in (${currFilter1_array2}) order by 1 asc `;
+
+    pool.query(select_q_with_param, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
+
 function selectMauBySystem() {
   return new Promise(function (resolve, reject) {
 
     const select_q =  "SELECT *, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR FROM dbo.mau_dau_by_systems_1 where date_year_month = (select max(date_year_month) from dbo.mau_dau_by_systems_1) order by 1 desc, 2 desc";
 
     pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
+function selectMauBySystemByFilters(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+    const select_q_with_param =  `SELECT *, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR FROM dbo.mau_dau_by_systems_1 where date_year_month = (select max(date_year_month) from dbo.mau_dau_by_systems_1 where date_yq in (${currFilter1_array2})) order by 1 desc, 2 desc`;
+
+    pool.query(select_q_with_param, (error, results) => {
       if (error) {
         reject('Some error')
       }
@@ -106,5 +137,7 @@ module.exports = {
     selectFilterCal,
     selectMauBySegment,
     selectMauBySystem,
-    selectMauByFilters
+    selectMauByFilters,
+    selectMauBySegmentByFilters,
+    selectMauBySystemByFilters
   }

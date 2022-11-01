@@ -71,9 +71,28 @@ app.get('/select_mau_by_segment/', (req, res) => {
     res.send('Some error');
   })
 })
+app.get('/select_mau_by_segment_by_filters/:currFilter1', (req, res) => {
+  select_model.selectMauBySegmentByFilters(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
 
 app.get('/select_mau_by_system/', (req, res) => {
   select_model.selectMauBySystem()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
+app.get('/select_mau_by_system_by_filters/:currFilter1', (req, res) => {
+  select_model.selectMauBySystemByFilters(req.params.currFilter1.replace('filter1=', ''))
   .then(response => {
     res.status(200).send(response);
   })

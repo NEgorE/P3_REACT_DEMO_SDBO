@@ -41,29 +41,56 @@ export const Chart1 = (props) => {
         if(chart1data){
             generateChart1(chart1data, METRICS, currMetric);
         }
-    }, [chart1data, currMetric])
+    }, [chart1data])
+
+    useEffect(() => {
+        getChart1Data();
+    }, [currFilter1, currMetric])
 
     function getChart1Data() {
         let result = false;
         const resultArr = [];
-        fetch(`http://localhost:3001/select_mau_by_system`)
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            result = JSON.parse(data);
-            for (let i = 0; i < result.length; i++) {
-                const currentResult = result[i]
-                let result2 = {};
-                result2.sys_type = currentResult.sys_type
-                result2.mau = parseInt(currentResult.mau)
-                result2.dau = parseInt(currentResult.dau)
-                result2.color = currentResult.color
-                result2.date_year_month = currentResult.date_year_month
-                resultArr.push(result2)
-            }
-            setchart1data(resultArr);
-          });
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_mau_by_system`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                for (let i = 0; i < result.length; i++) {
+                    const currentResult = result[i]
+                    let result2 = {};
+                    result2.sys_type = currentResult.sys_type
+                    result2.mau = parseInt(currentResult.mau)
+                    result2.dau = parseInt(currentResult.dau)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
+                    resultArr.push(result2)
+                }
+                setchart1data(resultArr);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_mau_by_system_by_filters/filter1=${currFilter1}`
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                for (let i = 0; i < result.length; i++) {
+                    const currentResult = result[i]
+                    let result2 = {};
+                    result2.sys_type = currentResult.sys_type
+                    result2.mau = parseInt(currentResult.mau)
+                    result2.dau = parseInt(currentResult.dau)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
+                    resultArr.push(result2)
+                }
+                setchart1data(resultArr);
+            });
+        }
     }
 
     function generateChart1(data, METRICS, currMetric) {
