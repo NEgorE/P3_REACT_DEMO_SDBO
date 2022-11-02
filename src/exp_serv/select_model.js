@@ -130,6 +130,20 @@ function selectFilterCal() {
   });
 }
 
+function selectServicesCount() {
+  return new Promise(function (resolve, reject) {
+
+    const select_q =  'select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 group by ser_name order by 2 desc';
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -139,5 +153,6 @@ module.exports = {
     selectMauBySystem,
     selectMauByFilters,
     selectMauBySegmentByFilters,
-    selectMauBySystemByFilters
+    selectMauBySystemByFilters,
+    selectServicesCount
   }

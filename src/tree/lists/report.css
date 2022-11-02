@@ -37,7 +37,6 @@
 .mh-90 {
     height: 90%;
 }
-
 .col{
     border: 1px  solid #3242ce;
 }
@@ -51,7 +50,6 @@
 .cobj{
     padding: calc(var(--bs-gutter-x) * .2);
 }
-
 .row-kpi{
     margin: 0;
 }
@@ -97,4 +95,7 @@
     color: var(--bs-gray-600);
     text-align: left;
     font-weight: 500;
+}
+.treemap_container{
+    padding: 0.1em;
 }

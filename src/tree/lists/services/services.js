@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Filter1 } from '../../components/tabs/filter1.js';
 import { Chart5 } from './chart5.js';
+import { Chart6 } from "./chart6.js";
 
 export const Services = (props) => {
 
@@ -30,7 +31,7 @@ export const Services = (props) => {
                     </div>
                     <div class='col col-4 h-100 cobj' >
                         <div class='col obj h-100'>
-                            
+                            <Chart6 />  
                         </div>
                     </div>
                 </div>
