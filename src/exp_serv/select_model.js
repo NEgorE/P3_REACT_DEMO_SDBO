@@ -150,6 +150,26 @@ function selectServicesCount(currFilter1) {
   });
 }
 
+function selectServicesCountBySystem(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select sys_type, sum(count_ser) as size from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by sys_type order by 2 desc`;
+    }
+    else {
+      var select_q =  'select sys_type, sum(count_ser) as size from dbo.services_data_mart_1 group by sys_type order by 2 desc';
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -160,5 +180,6 @@ module.exports = {
     selectMauByFilters,
     selectMauBySegmentByFilters,
     selectMauBySystemByFilters,
-    selectServicesCount
+    selectServicesCount,
+    selectServicesCountBySystem
   }

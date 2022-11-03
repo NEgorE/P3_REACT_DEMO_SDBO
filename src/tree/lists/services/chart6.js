@@ -45,7 +45,7 @@ export const Chart6 = (props) => {
         let result = false;
         const resultArr = [];
         if ( currFilter1.length <= 0 ) {
-            fetch(`http://localhost:3001/select_mau_by_system`)
+            fetch(`http://localhost:3001/select_services_count_by_system/filter1=`)
             .then(response => {
                 return response.text();
             })
@@ -55,17 +55,14 @@ export const Chart6 = (props) => {
                     const currentResult = result[i]
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
-                    result2.mau = parseInt(currentResult.mau)
-                    result2.dau = parseInt(currentResult.dau)
-                    result2.color = currentResult.color
-                    result2.date_year_month = currentResult.date_year_month
+                    result2.size = parseInt(currentResult.size)
                     resultArr.push(result2)
                 }
                 setchart6data(resultArr);
             });
         }
         else {
-            const query = `http://localhost:3001/select_mau_by_system_by_filters/filter1=${currFilter1}`
+            const query = `http://localhost:3001/select_services_count_by_system/filter1=${currFilter1}`
             fetch(query)
             .then(response => {
                 return response.text();
@@ -76,10 +73,7 @@ export const Chart6 = (props) => {
                     const currentResult = result[i]
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
-                    result2.mau = parseInt(currentResult.mau)
-                    result2.dau = parseInt(currentResult.dau)
-                    result2.color = currentResult.color
-                    result2.date_year_month = currentResult.date_year_month
+                    result2.size = parseInt(currentResult.size)
                     resultArr.push(result2)
                 }
                 setchart6data(resultArr);

@@ -105,7 +105,7 @@ export const Chart5 = (props) => {
     function generateChart5(chart5data) {
         const element = [
             <div class='row mh-15'>
-                <p class='chart-title '>Unique uses of the services</p>
+                <p class='chart-title '>Unique uses of services</p>
             </div>, 
             <div class="col mh-85 treemap_container">
                 <ResponsiveContainer width={'100%'} height={'100%'}>
