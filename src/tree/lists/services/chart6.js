@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { subscriberFilter1 } from '../../../MessageService.js';
-import { METRICS } from '../../components/constants';
 
 import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell  } from 'recharts';
 

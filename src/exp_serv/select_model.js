@@ -130,10 +130,16 @@ function selectFilterCal() {
   });
 }
 
-function selectServicesCount() {
+function selectServicesCount(currFilter1) {
   return new Promise(function (resolve, reject) {
 
-    const select_q =  'select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 group by ser_name order by 2 desc';
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by ser_name order by 2 desc`;
+    }
+    else {
+      var select_q =  'select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 group by ser_name order by 2 desc';
+    }
 
     pool.query(select_q, (error, results) => {
       if (error) {

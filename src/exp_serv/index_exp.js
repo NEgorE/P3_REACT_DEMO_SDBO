@@ -101,8 +101,8 @@ app.get('/select_mau_by_system_by_filters/:currFilter1', (req, res) => {
   })
 })
 
-app.get('/select_services_count/', (req, res) => {
-  select_model.selectServicesCount()
+app.get('/select_services_count/:currFilter1', (req, res) => {
+  select_model.selectServicesCount(req.params.currFilter1.replace('filter1=', ''))
   .then(response => {
     res.status(200).send(response);
   })

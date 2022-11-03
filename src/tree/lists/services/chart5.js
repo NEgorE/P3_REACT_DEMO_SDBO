@@ -65,12 +65,13 @@ export const Chart5 = (props) => {
     function getChart5Data() {
         let result = false;
         const resultArr = [];
-        fetch(`http://localhost:3001/select_services_count`)
-        .then(response => {
-            return response.text();
-        })
-        .then(data => {
-            result = JSON.parse(data);
+        if ( currFilter1.length <= 0 ) {
+            fetch(`http://localhost:3001/select_services_count/filter1=`)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
                 for (let i = 0; i < result.length; i++) {
                     const currentResult = result[i]
                     let result2 = {};
@@ -78,8 +79,27 @@ export const Chart5 = (props) => {
                     result2.size = parseInt(currentResult.size)
                     resultArr.push(result2)
                 }
-            setchart5data(resultArr);
-        });
+                setchart5data(resultArr);
+            });
+        }
+        else {
+            const query = `http://localhost:3001/select_services_count/filter1=${currFilter1}`
+            fetch(query)
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                result = JSON.parse(data);
+                for (let i = 0; i < result.length; i++) {
+                    const currentResult = result[i]
+                    let result2 = {};
+                    result2.name = currentResult.name
+                    result2.size = parseInt(currentResult.size)
+                    resultArr.push(result2)
+                }
+                setchart5data(resultArr);
+            });
+        }
     }
 
     function generateChart5(chart5data) {

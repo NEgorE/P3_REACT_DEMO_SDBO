@@ -6,7 +6,7 @@ import { Chart1 } from './chart1.js';
 import { Kpi2 } from './kpi2.js';
 import { Kpi1 } from './kpi1.js';
 import { RB1 } from './rb1.js';
-import { Filter1 } from '../../components/tabs/filter1.js';
+import { Filter1 } from '../../components/filtres/filter1.js';
 
 export const Maudaucrr = (props) => {
 

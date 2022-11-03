@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Filter1 } from '../../components/tabs/filter1.js';
+import { Filter1 } from '../../components/filtres/filter1.js';
 import { Chart5 } from './chart5.js';
 import { Chart6 } from "./chart6.js";
 
