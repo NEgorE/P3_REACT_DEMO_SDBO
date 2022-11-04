@@ -11,6 +11,7 @@ export const Chart6 = (props) => {
 
     const RADIAN = Math.PI / 180;
     const CustomizedLabelChart6 = (props) => {
+
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
         const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
         const x = cx + radius * Math.cos(-midAngle * RADIAN) + 7;
@@ -56,6 +57,8 @@ export const Chart6 = (props) => {
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
                     result2.size = parseInt(currentResult.size)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
                     resultArr.push(result2)
                 }
                 setchart6data(resultArr);
@@ -74,6 +77,8 @@ export const Chart6 = (props) => {
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
                     result2.size = parseInt(currentResult.size)
+                    result2.color = currentResult.color
+                    result2.date_year_month = currentResult.date_year_month
                     resultArr.push(result2)
                 }
                 setchart6data(resultArr);
@@ -83,17 +88,18 @@ export const Chart6 = (props) => {
 
     function generateChart6(data) {
         const title_period = data.map(item => item.date_year_month)[0];
+        const new_data = data.filter(item => item.date_year_month === title_period);
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>X for {title_period}</p>
+                <p class='chart-title '>Unique uses of services by systems for {title_period}</p>
             </div>, 
             <div class='row mh-90'>
                 <ResponsiveContainer width={'100%'} height={'100%'}>
                     <PieChart>
                         <Pie
-                        data={data}
+                        data={new_data}
                         color="#000000"
-                        dataKey={`dau`}
+                        dataKey={`size`}
                         nameKey="sys_type"
                         cx="50%"
                         cy="100%"

@@ -138,7 +138,7 @@ function selectServicesCount(currFilter1) {
       var select_q =  `select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by ser_name order by 2 desc`;
     }
     else {
-      var select_q =  'select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 group by ser_name order by 2 desc';
+      var select_q =  'select ser_name as name, sum(count_ser) as size  from dbo.services_data_mart_1 group by ser_name order by 2 desc';
     }
 
     pool.query(select_q, (error, results) => {
@@ -155,10 +155,10 @@ function selectServicesCountBySystem(currFilter1) {
 
     if ( currFilter1.length > 0 ) {
       const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
-      var select_q =  `select sys_type, sum(count_ser) as size from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by sys_type order by 2 desc`;
+      var select_q =  `select date_year_month, sys_type, sum(count_ser) as size, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by sys_type, date_year_month order by 1 desc, 2 desc`;
     }
     else {
-      var select_q =  'select sys_type, sum(count_ser) as size from dbo.services_data_mart_1 group by sys_type order by 2 desc';
+      var select_q =  `select date_year_month, sys_type, sum(count_ser) as size, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.services_data_mart_1 group by sys_type, date_year_month order by 1 desc, 2 desc`;
     }
 
     pool.query(select_q, (error, results) => {
