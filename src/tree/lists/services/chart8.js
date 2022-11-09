@@ -9,33 +9,10 @@ export const Chart8 = (props) => {
 
     const colors = scaleOrdinal(schemeCategory10).range();
 
-    const data = [
-        { x: 100, y: 200, z: 200 },
-        { x: 120, y: 100, z: 260 },
-        { x: 170, y: 300, z: 400 },
-        { x: 140, y: 250, z: 280 },
-        { x: 150, y: 400, z: 500 },
-        { x: 110, y: 280, z: 200 },
-      ];
-
     const log_prefix = 'CHART8: '
 
     const currFilter1 = subscriberFilter1._value
 
-    const RADIAN = Math.PI / 180;
-    const CustomizedLabelChart8 = (props) => {
-
-        const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN) + 7;
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text x={x} y={y} fill="white" textAnchor={'middle'} dominantBaseline="central">
-                {`${value} (${(percent * 100).toFixed(1)}%)`}
-            </text>
-        );
-    };
 
     const [chart8, setChart8] = useState(false)
     const [chart8data, setchart8data] = useState(false)
@@ -47,7 +24,7 @@ export const Chart8 = (props) => {
 
     useEffect(() => {
         if(chart8data){
-            generateChart8(data);
+            generateChart8(chart8data);
         }
     }, [chart8data])
 
@@ -59,7 +36,7 @@ export const Chart8 = (props) => {
         let result = false;
         const resultArr = [];
         if ( currFilter1.length <= 0 ) {
-            fetch(`http://localhost:3001/select_services_count_by_system/filter1=`)
+            fetch(`http://localhost:3001/select_services_count_by_used_by_clients/filter1=`)
             .then(response => {
                 return response.text();
             })
@@ -68,17 +45,16 @@ export const Chart8 = (props) => {
                 for (let i = 0; i < result.length; i++) {
                     const currentResult = result[i]
                     let result2 = {};
-                    result2.sys_type = currentResult.sys_type
-                    result2.size = parseInt(currentResult.size)
-                    result2.color = currentResult.color
-                    result2.date_year_month = currentResult.date_year_month
+                    result2.ser_name = currentResult.ser_name
+                    result2.x = parseInt(currentResult.count_ser_used)
+                    result2.y = parseInt(currentResult.count_ser_date)
                     resultArr.push(result2)
                 }
                 setchart8data(resultArr);
             });
         }
         else {
-            const query = `http://localhost:3001/select_services_count_by_system/filter1=${currFilter1}`
+            const query = `http://localhost:3001/select_services_count_by_used_by_clients/filter1=${currFilter1}`
             fetch(query)
             .then(response => {
                 return response.text();
@@ -88,10 +64,9 @@ export const Chart8 = (props) => {
                 for (let i = 0; i < result.length; i++) {
                     const currentResult = result[i]
                     let result2 = {};
-                    result2.sys_type = currentResult.sys_type
-                    result2.size = parseInt(currentResult.size)
-                    result2.color = currentResult.color
-                    result2.date_year_month = currentResult.date_year_month
+                    result2.ser_name = currentResult.ser_name
+                    result2.x = parseInt(currentResult.count_ser_used)
+                    result2.y = parseInt(currentResult.count_ser_date)
                     resultArr.push(result2)
                 }
                 setchart8data(resultArr);
@@ -116,8 +91,8 @@ export const Chart8 = (props) => {
                             }}
                         >
                         <CartesianGrid />
-                        <XAxis type="number" dataKey="x" name="stature" unit="cm" />
-                        <YAxis type="number" dataKey="y" name="weight" unit="kg" />
+                        <XAxis type="number" dataKey="x" name="clients"/>
+                        <YAxis type="number" dataKey="y" name="days"/>
                         <Tooltip cursor={{ strokeDasharray: '3 3' }} />
                         <Scatter name="A school" data={data} fill="#8884d8">
                             {data.map((entry, index) => (

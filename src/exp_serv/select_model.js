@@ -170,6 +170,64 @@ function selectServicesCountBySystem(currFilter1) {
   });
 }
 
+function selectServicesCountByUsedByClients(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `
+      select 
+        t1.*,
+        t2.count_ser_date
+      from
+      (
+        select 
+        s1.ser_name,
+          count(distinct s1.cl_id) AS count_ser_used
+        from dbo.services_data_mart_2_1 s1
+        where date_yq in (${currFilter1_array2}) 
+        GROUP BY s1.ser_name
+      ) t1 left join
+        (select 
+        s2.ser_name,
+        count(s2.date_id) AS count_ser_date
+        from dbo.services_data_mart_2_2 s2
+        where date_yq in (${currFilter1_array2}) 
+        GROUP BY s2.ser_name
+        ) t2 on t1.ser_name=t2.ser_name
+    `;
+    }
+    else {
+      var select_q =  `
+        select 
+          t1.*,
+          t2.count_ser_date
+        from
+        (
+          select 
+          s1.ser_name,
+            count(distinct s1.cl_id) AS count_ser_used
+          from dbo.services_data_mart_2_1 s1
+          GROUP BY s1.ser_name
+        ) t1 left join
+          (select 
+          s2.ser_name,
+          count(s2.date_id) AS count_ser_date
+          from dbo.services_data_mart_2_2 s2
+          GROUP BY s2.ser_name
+          ) t2 on t1.ser_name=t2.ser_name
+      `;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -181,5 +239,6 @@ module.exports = {
     selectMauBySegmentByFilters,
     selectMauBySystemByFilters,
     selectServicesCount,
-    selectServicesCountBySystem
+    selectServicesCountBySystem,
+    selectServicesCountByUsedByClients
   }
