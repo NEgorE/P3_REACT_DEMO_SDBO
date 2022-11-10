@@ -228,6 +228,26 @@ function selectServicesCountByUsedByClients(currFilter1) {
   });
 }
 
+function selectDailyServices(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select * from dbo.services_daily_data_mart_1 order by 1`;
+    }
+    else {
+      var select_q =  `select * from dbo.services_daily_data_mart_1 order by 1`;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -240,5 +260,6 @@ module.exports = {
     selectMauBySystemByFilters,
     selectServicesCount,
     selectServicesCountBySystem,
-    selectServicesCountByUsedByClients
+    selectServicesCountByUsedByClients,
+    selectDailyServices
   }

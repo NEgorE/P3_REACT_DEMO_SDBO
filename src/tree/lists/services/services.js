@@ -3,6 +3,7 @@ import { Filter1 } from '../../components/filtres/filter1.js';
 import { Chart5 } from './chart5.js';
 import { Chart6 } from "./chart6.js";
 import { Chart8 } from "./chart8.js";
+import { Chart9 } from "./chart9.js";
 
 export const Services = (props) => {
 
@@ -49,7 +50,7 @@ export const Services = (props) => {
                     </div>
                     <div class='col col-4 h-100 cobj' >
                         <div class='col obj h-100'>
-                            
+                            <Chart9 />
                         </div>
                     </div>
                 </div>

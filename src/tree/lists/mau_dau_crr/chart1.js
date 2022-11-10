@@ -93,7 +93,6 @@ export const Chart1 = (props) => {
         const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
         const title_metric = use_metric.toUpperCase();
         const title_period = data.map(item => item.date_year_month)[0];
-        console.log(data)
         const element = [
             <div class='row mh-10'>
                 <p class='chart-title '>{title_metric} for {title_period}</p>
