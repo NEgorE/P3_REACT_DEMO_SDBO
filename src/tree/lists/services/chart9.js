@@ -21,11 +21,6 @@ export const Chart9 = (props) => {
         };
     };
 
-    function CustomizedBrush9 (props)  {
-        console.log(props)
-        return 'x';
-    }
-
     const [chart9, setChart9] = useState(false)
     const [chart9data, setchart9data] = useState(false)
 
@@ -108,7 +103,7 @@ export const Chart9 = (props) => {
                         <XAxis dataKey="date_id"  interval={'preserveStartEnd'} tickSize={5} height={20} tick={{fontSize: 9}} />
                         <Tooltip />
                         <Brush dataKey='date_id' height={10} tickFormatter={() => { return ''}} />
-                        <Line type="monotone" dataKey={`aband2`} stroke="#4477aa" fill="#4477aa" strokeWidth={1} dot={{ r: 1.5 }} label={<CustomizedLabelChart9 />} />
+                        <Line type="monotone" dataKey={`aband2`} name={'% of failed'}  stroke="#4477aa" fill="#4477aa"  dot={{ r: 1.5 }} label={<CustomizedLabelChart9 />} />
                     </LineChart>
                 </ResponsiveContainer>         
             </div> 

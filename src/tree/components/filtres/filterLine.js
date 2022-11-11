@@ -3,10 +3,10 @@ import classnames from "classnames"
 import {TABS} from '../constants.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./tabs.css";
+import "./filterLine.css";
 
 
-export const Tabs = ({changeTab}) => {
+export const FilterLine = ({changeTab}) => {
 
   const [activeTabNum, setActiveTabNum] = useState(TABS.filter(item => item.type === 1).map(item => item.type)[0])
 
