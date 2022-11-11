@@ -233,7 +233,7 @@ function selectDailyServices(currFilter1) {
 
     if ( currFilter1.length > 0 ) {
       const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
-      var select_q =  `select * from dbo.services_daily_data_mart_1 order by 1`;
+      var select_q =  `select * from dbo.services_daily_data_mart_1 where date_yq in (${currFilter1_array2})  order by 1`;
     }
     else {
       var select_q =  `select * from dbo.services_daily_data_mart_1 order by 1`;

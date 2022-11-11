@@ -3,13 +3,13 @@ import { subscriberFilter1 } from '../../../MessageService.js';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
 
-export const Chart9 = (props) => {
+export const Chart7 = (props) => {
 
-    const log_prefix = 'CHART9: '
+    const log_prefix = 'CHART7: '
 
     const currFilter1 = subscriberFilter1._value
 
-    const CustomizedLabelChart9 = (props) => {
+    const CustomizedLabelChart7 = (props) => {
         const { x, y, value, index} = props;
         if (index % 20 === 0){
             return (
@@ -21,30 +21,30 @@ export const Chart9 = (props) => {
         };
     };
 
-    function CustomizedBrush9 (props)  {
+    function CustomizedBrush7 (props)  {
         console.log(props)
         return 'x';
     }
 
-    const [chart9, setChart9] = useState(false)
-    const [chart9data, setchart9data] = useState(false)
+    const [chart7, setChart7] = useState(false)
+    const [chart7data, setchart7data] = useState(false)
 
     useEffect(() => {
         console.log(log_prefix + currFilter1);
-        getChart9Data();
+        getChart7Data();
     }, [])
 
     useEffect(() => {
-        if(chart9data){
-            generateChart9(chart9data);
+        if(chart7data){
+            generateChart7(chart7data);
         }
-    }, [chart9data])
+    }, [chart7data])
 
     useEffect(() => {
-        getChart9Data();
+        getChart7Data();
     }, [currFilter1])
     
-    function getChart9Data() {
+    function getChart7Data() {
         let result = false;
         const resultArr = [];
         console.log(log_prefix + currFilter1.length + ' length filter');
@@ -62,7 +62,7 @@ export const Chart9 = (props) => {
                     result2.aband2 = currentResult.aband2;
                     resultArr.push(result2)
                 }
-                setchart9data(resultArr);
+                setchart7data(resultArr);
             });
         }
         else {
@@ -81,12 +81,12 @@ export const Chart9 = (props) => {
                     result2.aband2 = currentResult.aband2;
                     resultArr.push(result2)
                 }
-                setchart9data(resultArr);
+                setchart7data(resultArr);
             });
         }
     };
 
-    function generateChart9(data) {
+    function generateChart7(data) {
         console.log(data);
         const element = [
             <div class='row mh-10'>
@@ -105,18 +105,18 @@ export const Chart9 = (props) => {
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <YAxis domain={[0, 100]} name="Rate" unit={'%'}/>
-                        <XAxis dataKey="date_id"  interval={'preserveStartEnd'} tickSize={5} height={20} tick={{fontSize: 9}} />
+                        <XAxis dataKey="date_id"  interval={'preserveStartEnd'} tickSize={5} height={20} tick={{fontSize: 7}} />
                         <Tooltip />
                         <Brush dataKey='date_id' height={10} tickFormatter={() => { return ''}} />
-                        <Line type="monotone" dataKey={`aband2`} stroke="#4477aa" fill="#4477aa" strokeWidth={1} dot={{ r: 1.5 }} label={<CustomizedLabelChart9 />} />
+                        <Line type="monotone" dataKey={`aband2`} stroke="#4477aa" fill="#4477aa" strokeWidth={1} dot={{ r: 1.5 }} label={<CustomizedLabelChart7 />} />
                     </LineChart>
                 </ResponsiveContainer>         
             </div> 
         ]; 
-        setChart9(element);
+        setChart7(element);
     }
 
     return (
-        chart9 ? chart9 : 'Smth wrong'
+        chart7 ? chart7 : 'Smth wrong'
     )
 }
