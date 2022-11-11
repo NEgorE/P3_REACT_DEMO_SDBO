@@ -13,8 +13,8 @@ function App() {
     return(
         <div className="container-fluid text-center">
             <Tabs changeTab={(tab) => setActiveTabNum(tab)}/>
-            <FilterLine changeTab={(tab) => setActiveTabNum(tab)}/>
-            <Report numTab = {activeTabNum} />
+            <FilterLine />
+            <Report numTab = {activeTabNum}/>
         </div>
     )
 }

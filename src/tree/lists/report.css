@@ -3,7 +3,7 @@
     border-style: solid;
     border-color:  #f2f2f2 #dee2e6 #dee2e6;
     padding: calc(var(--bs-gutter-x) * .2);
-    height: 46em;
+    height: 45.5em;
     background-color: #f2f2f2;
 }
 

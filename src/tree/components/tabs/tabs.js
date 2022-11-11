@@ -22,9 +22,9 @@ export const Tabs = ({changeTab}) => {
   
   <ul className="nav nav-tabs">
     {TABS.map(item => (
-      <li className={classnames("nav-item", {mactive: item.type === activeTabNum})}>
+      <li className={classnames("nav-item")}>
         <button  
-           className={classnames("nav-link", {active: item.type === activeTabNum}, {mactive: item.type === activeTabNum})}
+           className={classnames("nav-link", {active: item.type === activeTabNum})}
            onClick={() => setActiveTab(item.type)}
         >
         {item.title}</button >

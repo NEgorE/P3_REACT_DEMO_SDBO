@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { subscriberFilter1 } from '../../../MessageService.js';
+import { FilterLine } from "./filterLine.js";
 
 export const Filter1 = (props) => {
 
