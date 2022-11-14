@@ -37,6 +37,7 @@ export const Filter1 = (props) => {
     };
 
     const onChangeFilter1 = e => {
+        console.log('FILTER_LINE: press button filrer' )
         const { value, checked } = e.target;
         const curr_subs_value = subscriberFilter1._value
         if (checked) {

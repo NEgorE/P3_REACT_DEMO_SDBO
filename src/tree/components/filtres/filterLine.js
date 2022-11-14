@@ -9,32 +9,46 @@ export const FilterLine = () => {
 
     const log_prefix = 'FILTER_LINE: ';
 
-    subscriberFilter1.subscribe((vl) => {
-       
-        if (currFilter1.length < vl.length) {
-            setIsClear(isClear + 1)
-        }
-        else {
-            setIsClear(isClear - 1)
-        }
-        setCurrFilter1(vl)
-    })
-
     const [isClear, setIsClear] = useState(0)
-    const [buttonClear, setButtonClear] = useState(0)
-
     const [currFilter1, setCurrFilter1] = useState([])
+
+    const [buttonClear, setButtonClear] = useState(0)
+    const [buttonFilter1, setButtonFilter1] = useState([])
+
     useEffect(() => {
-        console.log(log_prefix + isClear);
-        console.log(log_prefix + currFilter1.length);
-    }, [currFilter1])
+        subscriberFilter1.subscribe((vl) => {
+            const currFilterCount = currFilter1.length;
+            const newFilterCount = subscriberFilter1._value.length; 
+            if (currFilterCount === newFilterCount) {
+                console.log(log_prefix + ' currFilterCount =  newFilterCount, vl =' + vl)
+            }
+            if (currFilterCount < newFilterCount) {
+                console.log(log_prefix + ' currFilterCount <  newFilterCount vl =' + vl)
+                setCurrFilter1(vl)
+            }
+            if (currFilterCount > newFilterCount) {
+                console.log(log_prefix + ' currFilterCount >  newFilterCount vl =' + vl)
+                setCurrFilter1(vl)
+            }
+        })
+
+        renderCrear(isClear);
+    }, [])
 
     useEffect(() => {
         renderCrear(isClear);
     }, [isClear])
 
-    function renderCrear(isClear) {
-        if (isClear != 0){
+    useEffect(() => {
+        renderButtonFilter1(currFilter1);
+    }, [currFilter1])
+
+    function renderButtonFilter1(data) {
+        
+    }
+
+    function renderCrear(isClearNumber) {
+        if (isClearNumber != 0){
             setButtonClear(
                 <li className="nav-item nav-item-filter">
                     <button className="nav-link nav-link-filter-clear" onClick={() => {}} >Clear</button >
@@ -48,6 +62,8 @@ export const FilterLine = () => {
                 </li>
             )
         }
+        console.log(currFilter1);
+        console.log(currFilter1.length);
     }
 
     return (
