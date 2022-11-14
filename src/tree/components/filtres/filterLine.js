@@ -9,49 +9,48 @@ export const FilterLine = () => {
 
     const log_prefix = 'FILTER_LINE: ';
 
-    const [isClear, setIsClear] = useState(0)
     const [currFilter1, setCurrFilter1] = useState([])
 
     const [buttonClear, setButtonClear] = useState(0)
-    const [buttonFilter1, setButtonFilter1] = useState([])
+    const [buttonFilter1, setButtonFilter1] = useState(false)
 
     useEffect(() => {
         subscriberFilter1.subscribe((vl) => {
-            const currFilterCount = currFilter1.length;
             const newFilterCount = subscriberFilter1._value.length; 
-            if (currFilterCount === newFilterCount) {
-                console.log(log_prefix + ' currFilterCount =  newFilterCount, vl =' + vl)
-            }
-            if (currFilterCount < newFilterCount) {
-                console.log(log_prefix + ' currFilterCount <  newFilterCount vl =' + vl)
-                setCurrFilter1(vl)
-            }
-            if (currFilterCount > newFilterCount) {
-                console.log(log_prefix + ' currFilterCount >  newFilterCount vl =' + vl)
-                setCurrFilter1(vl)
-            }
+            setCurrFilter1(vl)
+            renderCrear(newFilterCount);
         })
-
-        renderCrear(isClear);
     }, [])
-
-    useEffect(() => {
-        renderCrear(isClear);
-    }, [isClear])
 
     useEffect(() => {
         renderButtonFilter1(currFilter1);
     }, [currFilter1])
 
     function renderButtonFilter1(data) {
-        
+        console.log(log_prefix + data)
+        const currFilterCount = data.length;
+        if ( currFilterCount > 0) {
+            setButtonFilter1(
+                <li className="nav-item nav-item-filter">
+                    <button className="nav-link nav-link-filter" onClick={clearFilter1} >Filter1: {currFilterCount} </button >
+                    
+                </li>
+            )
+        }
+        else {
+            setButtonFilter1(false)
+        }
+    }
+
+    function clearFilter1() {
+        subscriberFilter1.next([])
     }
 
     function renderCrear(isClearNumber) {
         if (isClearNumber != 0){
             setButtonClear(
                 <li className="nav-item nav-item-filter">
-                    <button className="nav-link nav-link-filter-clear" onClick={() => {}} >Clear</button >
+                    <button className="nav-link nav-link-filter" onClick={() => {}} >Clear</button >
                 </li>
             )
         }
@@ -62,14 +61,12 @@ export const FilterLine = () => {
                 </li>
             )
         }
-        console.log(currFilter1);
-        console.log(currFilter1.length);
     }
 
     return (
         <ul className="nav nav-filters">
             {buttonClear ? buttonClear : false}
-            {buttonClear ? buttonClear : false}
+            {buttonFilter1 ? buttonFilter1 : false}
         </ul>
     )
 }

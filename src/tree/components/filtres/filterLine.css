@@ -6,14 +6,14 @@
     padding: 0.3em;
 }
 
-.nav-link-filter-clear{
+.nav-link-filter{
     border-radius: .5em;
     border-width: .15em;
     border-color: #dee2e6;
     border-style: solid;
     color: #495057;
     --bs-nav-link-hover-color: #495057;
-
+    margin-right: 0.3em;
 }
 
 .nav-link-no-filters{
