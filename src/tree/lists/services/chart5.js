@@ -48,7 +48,6 @@ export const Chart5 = (props) => {
     const [chart5data, setchart5data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         getChart5Data();
     }, [])
 

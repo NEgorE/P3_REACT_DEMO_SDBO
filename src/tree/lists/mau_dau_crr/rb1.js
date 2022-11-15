@@ -14,13 +14,11 @@ export const RB1 = (props) => {
     const [currMetric, setCurrMetric] = useState(f_render_metric)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         genetareRB1(METRICS, f_render_metric);
     }, [])
 
     useEffect(() => {
         subscriberMetric1.next(currMetric)
-        console.log(log_prefix + ' sub value ' + subscriberMetric1._value);
         renderCharts();
     }, [currMetric])
 

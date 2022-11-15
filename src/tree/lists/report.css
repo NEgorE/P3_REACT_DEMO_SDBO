@@ -3,7 +3,7 @@
     border-style: solid;
     border-color:  #f2f2f2 #dee2e6 #dee2e6;
     padding: calc(var(--bs-gutter-x) * .2);
-    height: 45.5em;
+    height: 45.3em;
     background-color: #f2f2f2;
 }
 
@@ -38,7 +38,7 @@
     height: 90%;
 }
 .col{
-    border: 1px  solid #3242ce;
+    --border: 1px  solid #3242ce;
 }
 
 .obj {

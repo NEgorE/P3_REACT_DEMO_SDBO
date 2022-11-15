@@ -25,7 +25,6 @@ export const Chart9 = (props) => {
     const [chart9data, setchart9data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + currFilter1);
         getChart9Data();
     }, [])
 
@@ -42,7 +41,6 @@ export const Chart9 = (props) => {
     function getChart9Data() {
         let result = false;
         const resultArr = [];
-        console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_daily_services/filter1=`)
             .then(response => {
@@ -62,7 +60,6 @@ export const Chart9 = (props) => {
         }
         else {
             const query = `http://localhost:3001/select_daily_services/filter1=${currFilter1}`
-            console.log(log_prefix + query);
             fetch(query)
             .then(response => {
                 return response.text();
@@ -82,7 +79,6 @@ export const Chart9 = (props) => {
     };
 
     function generateChart9(data) {
-        console.log(data);
         const element = [
             <div class='row mh-10'>
                 <p class='chart-title '>Cart Abandonment Rate</p>

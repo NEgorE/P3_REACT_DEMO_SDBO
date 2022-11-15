@@ -25,7 +25,6 @@ export const Chart7 = (props) => {
     const [chart7data, setchart7data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + currFilter1);
         getChart7Data();
     }, [])
 
@@ -42,7 +41,6 @@ export const Chart7 = (props) => {
     function getChart7Data() {
         let result = false;
         const resultArr = [];
-        console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_daily_services/filter1=`)
             .then(response => {
@@ -63,7 +61,6 @@ export const Chart7 = (props) => {
         }
         else {
             const query = `http://localhost:3001/select_daily_services/filter1=${currFilter1}`
-            console.log(log_prefix + query);
             fetch(query)
             .then(response => {
                 return response.text();

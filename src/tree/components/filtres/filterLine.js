@@ -27,7 +27,6 @@ export const FilterLine = () => {
     }, [currFilter1])
 
     function renderButtonFilter1(data) {
-        console.log(log_prefix + data)
         const currFilterCount = data.length;
         if ( currFilterCount > 0) {
             setButtonFilter1(
@@ -50,7 +49,7 @@ export const FilterLine = () => {
         if (isClearNumber != 0){
             setButtonClear(
                 <li className="nav-item nav-item-filter">
-                    <button className="nav-link nav-link-filter" onClick={() => {}} >Clear</button >
+                    <button className="nav-link nav-link-filter" onClick={clearFilter1} >Clear</button >
                 </li>
             )
         }

@@ -18,7 +18,6 @@ export const Chart8 = (props) => {
     const [chart8data, setchart8data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         getChart8Data();
     }, [])
 

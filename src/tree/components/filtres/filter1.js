@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { subscriberFilter1 } from '../../../MessageService.js';
-import { FilterLine } from "./filterLine.js";
 
 export const Filter1 = (props) => {
 
@@ -8,19 +7,28 @@ export const Filter1 = (props) => {
 
     const log_prefix = 'Filter1: '
 
-    const currFilter1 = subscriberFilter1._value
+    const [currFilter1, setCurrFilter1] = useState(subscriberFilter1._value)
 
     const [filter1data, setFilter1data] = useState(false)
     const [filter1, setFilter1] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         getFilter1Data();
+        subscriberFilter1.subscribe((vl) => {
+            if (vl.length>0) {
+            }
+            else {
+                setCurrFilter1(subscriberFilter1._value)
+                renderCharts();
+                setFilter1(false);
+                getFilter1Data();
+            }
+        })
     }, [])
 
     useEffect(() => {
         if(filter1data){
-            generateFilter1(filter1data);
+            generateFilter1(filter1data, currFilter1);
         }
     }, [filter1data])
 
@@ -37,7 +45,6 @@ export const Filter1 = (props) => {
     };
 
     const onChangeFilter1 = e => {
-        console.log('FILTER_LINE: press button filrer' )
         const { value, checked } = e.target;
         const curr_subs_value = subscriberFilter1._value
         if (checked) {
@@ -48,17 +55,17 @@ export const Filter1 = (props) => {
         if (!checked) {
             const curr_subs_value_new = curr_subs_value.filter(item => item != value)
             subscriberFilter1.next(curr_subs_value_new)
-        }
+        }   
         renderCharts();
     }
 
-    function generateFilter1(data) {
+    function generateFilter1(data, data2) {
         const element =(
             <div class="row align-items-center h-100 row-rb">
                 <div class="btn-group obj rb" role="groupf1" aria-label="Basic radio toggle button group">
                     {data.map((el, key) =>(
                         [
-                            currFilter1.indexOf(el.date_yq) >= 0 ? 
+                            data2.indexOf(el.date_yq) >= 0 ? 
                             <input type="checkbox" class="btn-check" name="btnf1radio" id={`btnf1check ${key}`} autoComplete="off" 
                                 value={`${el.date_yq}`} onChange={onChangeFilter1} defaultChecked={true}
                             />

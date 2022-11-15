@@ -42,13 +42,11 @@ export const Chart4 = () => {
     const [chart4data, setchart4data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         getchart4data();
     }, [])
 
     useEffect(() => {
         if(chart4data){
-            console.log(log_prefix + 'generate chart');
             generateChart4(chart4data);
         }
     }, [chart4data] )
@@ -59,7 +57,6 @@ export const Chart4 = () => {
     
     function getchart4data() {
         let result = false;
-        console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_mau`)
             .then(response => {
@@ -72,7 +69,6 @@ export const Chart4 = () => {
         }
         else {
             const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
-            console.log(log_prefix + query);
             fetch(query)
             .then(response => {
                 return response.text();
