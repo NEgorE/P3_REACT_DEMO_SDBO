@@ -130,6 +130,124 @@ function selectFilterCal() {
   });
 }
 
+function selectServicesCount(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select ser_name as name, sum(count_ser) as size from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by ser_name order by 2 desc`;
+    }
+    else {
+      var select_q =  'select ser_name as name, sum(count_ser) as size  from dbo.services_data_mart_1 group by ser_name order by 2 desc';
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
+function selectServicesCountBySystem(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select date_year_month, sys_type, sum(count_ser) as size, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.services_data_mart_1 where date_yq in (${currFilter1_array2}) group by sys_type, date_year_month order by 1 desc, 2 desc`;
+    }
+    else {
+      var select_q =  `select date_year_month, sys_type, sum(count_ser) as size, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.services_data_mart_1 group by sys_type, date_year_month order by 1 desc, 2 desc`;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
+function selectServicesCountByUsedByClients(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `
+      select 
+        t1.*,
+        t2.count_ser_date
+      from
+      (
+        select 
+        s1.ser_name,
+          count(distinct s1.cl_id) AS count_ser_used
+        from dbo.services_data_mart_2_1 s1
+        where date_yq in (${currFilter1_array2}) 
+        GROUP BY s1.ser_name
+      ) t1 left join
+        (select 
+        s2.ser_name,
+        count(s2.date_id) AS count_ser_date
+        from dbo.services_data_mart_2_2 s2
+        where date_yq in (${currFilter1_array2}) 
+        GROUP BY s2.ser_name
+        ) t2 on t1.ser_name=t2.ser_name
+    `;
+    }
+    else {
+      var select_q =  `
+        select 
+          t1.*,
+          t2.count_ser_date
+        from
+        (
+          select 
+          s1.ser_name,
+            count(distinct s1.cl_id) AS count_ser_used
+          from dbo.services_data_mart_2_1 s1
+          GROUP BY s1.ser_name
+        ) t1 left join
+          (select 
+          s2.ser_name,
+          count(s2.date_id) AS count_ser_date
+          from dbo.services_data_mart_2_2 s2
+          GROUP BY s2.ser_name
+          ) t2 on t1.ser_name=t2.ser_name
+      `;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
+function selectDailyServices(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select * from dbo.services_daily_data_mart_1 where date_yq in (${currFilter1_array2})  order by 1`;
+    }
+    else {
+      var select_q =  `select * from dbo.services_daily_data_mart_1 order by 1`;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -139,5 +257,9 @@ module.exports = {
     selectMauBySystem,
     selectMauByFilters,
     selectMauBySegmentByFilters,
-    selectMauBySystemByFilters
+    selectMauBySystemByFilters,
+    selectServicesCount,
+    selectServicesCountBySystem,
+    selectServicesCountByUsedByClients,
+    selectDailyServices
   }

@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import { subscriberMetric1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
-import { Maudaucrr } from "./mau_dau_crr.js";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
-
 export const RB1 = (props) => {
 
     const { renderCharts } = props
@@ -20,13 +14,11 @@ export const RB1 = (props) => {
     const [currMetric, setCurrMetric] = useState(f_render_metric)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         genetareRB1(METRICS, f_render_metric);
     }, [])
 
     useEffect(() => {
         subscriberMetric1.next(currMetric)
-        console.log(log_prefix + ' sub value ' + subscriberMetric1._value);
         renderCharts();
     }, [currMetric])
 

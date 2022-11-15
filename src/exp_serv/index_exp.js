@@ -101,6 +101,47 @@ app.get('/select_mau_by_system_by_filters/:currFilter1', (req, res) => {
   })
 })
 
+app.get('/select_services_count/:currFilter1', (req, res) => {
+  select_model.selectServicesCount(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
+app.get('/select_services_count_by_system/:currFilter1', (req, res) => {
+  select_model.selectServicesCountBySystem(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
+app.get('/select_services_count_by_used_by_clients/:currFilter1', (req, res) => {
+  select_model.selectServicesCountByUsedByClients(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
+app.get('/select_daily_services/:currFilter1', (req, res) => {
+  select_model.selectDailyServices(req.params.currFilter1.replace('filter1=', ''))
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })

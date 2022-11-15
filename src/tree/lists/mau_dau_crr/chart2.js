@@ -4,10 +4,6 @@ import { METRICS } from '../../components/constants';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
 
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./mau_dau_crr.css";
-
 export const Chart2 = (props) => {
 
     const log_prefix = 'CHART2: '
@@ -26,7 +22,6 @@ export const Chart2 = (props) => {
     const [chart2data, setchart2data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + currFilter1);
         getChart2Data();
     }, [])
 
@@ -42,7 +37,6 @@ export const Chart2 = (props) => {
     
     function getChart2Data() {
         let result = false;
-        console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_mau`)
             .then(response => {
@@ -55,7 +49,6 @@ export const Chart2 = (props) => {
         }
         else {
             const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
-            console.log(log_prefix + query);
             fetch(query)
             .then(response => {
                 return response.text();

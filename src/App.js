@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {Tabs} from './tree/components/tabs/tabs.js';
 import {TABS} from './tree/components/constants';
 import {Report} from './tree/lists/report.js';
-import { subscriberFilter1 } from './MessageService.js';
+import {FilterLine} from './tree/components/filtres/filterLine.js';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
@@ -13,7 +13,8 @@ function App() {
     return(
         <div className="container-fluid text-center">
             <Tabs changeTab={(tab) => setActiveTabNum(tab)}/>
-            <Report numTab = {activeTabNum} />
+            <FilterLine />
+            <Report numTab = {activeTabNum}/>
         </div>
     )
 }

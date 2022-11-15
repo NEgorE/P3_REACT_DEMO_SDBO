@@ -13,7 +13,6 @@ export const Kpi1 = (props) => {
     const [chart2data, setchart2data] = useState(false)
 
     useEffect(() => {
-        console.log(log_prefix + 'load data during first render');
         getChart2Data();
     }, [])
 
@@ -29,7 +28,6 @@ export const Kpi1 = (props) => {
     
     function getChart2Data() {
         let result = false;
-        console.log(log_prefix + currFilter1.length + ' length filter');
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_mau`)
             .then(response => {
@@ -42,7 +40,6 @@ export const Kpi1 = (props) => {
         }
         else {
             const query = `http://localhost:3001/select_mau_by_filters/filter1=${currFilter1}`
-            console.log(log_prefix + query);
             fetch(query)
             .then(response => {
                 return response.text();

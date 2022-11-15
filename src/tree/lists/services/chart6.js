@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { METRICS } from '../../components/constants';
+import { subscriberFilter1 } from '../../../MessageService.js';
 
 import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell  } from 'recharts';
 
-export const Chart1 = (props) => {
+export const Chart6 = (props) => {
 
-    const log_prefix = 'CHART1: '
+    const log_prefix = 'CHART6: '
 
-    const currMetric = subscriberMetric1._value
     const currFilter1 = subscriberFilter1._value
 
     const RADIAN = Math.PI / 180;
-    const CustomizedLabelChart1 = (props) => {
+    const CustomizedLabelChart6 = (props) => {
+
         const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, value } = props
         const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
         const x = cx + radius * Math.cos(-midAngle * RADIAN) + 7;
@@ -25,28 +24,28 @@ export const Chart1 = (props) => {
         );
     };
 
-    const [chart1, setChart1] = useState(false)
-    const [chart1data, setchart1data] = useState(false)
+    const [chart6, setChart6] = useState(false)
+    const [chart6data, setchart6data] = useState(false)
 
     useEffect(() => {
-        getChart1Data();
+        getChart6Data();
     }, [])
 
     useEffect(() => {
-        if(chart1data){
-            generateChart1(chart1data, METRICS, currMetric);
+        if(chart6data){
+            generateChart6(chart6data);
         }
-    }, [chart1data])
+    }, [chart6data])
 
     useEffect(() => {
-        getChart1Data();
-    }, [currFilter1, currMetric])
+        getChart6Data();
+    }, [currFilter1])
 
-    function getChart1Data() {
+    function getChart6Data() {
         let result = false;
         const resultArr = [];
         if ( currFilter1.length <= 0 ) {
-            fetch(`http://localhost:3001/select_mau_by_system`)
+            fetch(`http://localhost:3001/select_services_count_by_system/filter1=`)
             .then(response => {
                 return response.text();
             })
@@ -56,17 +55,16 @@ export const Chart1 = (props) => {
                     const currentResult = result[i]
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
-                    result2.mau = parseInt(currentResult.mau)
-                    result2.dau = parseInt(currentResult.dau)
+                    result2.size = parseInt(currentResult.size)
                     result2.color = currentResult.color
                     result2.date_year_month = currentResult.date_year_month
                     resultArr.push(result2)
                 }
-                setchart1data(resultArr);
+                setchart6data(resultArr);
             });
         }
         else {
-            const query = `http://localhost:3001/select_mau_by_system_by_filters/filter1=${currFilter1}`
+            const query = `http://localhost:3001/select_services_count_by_system/filter1=${currFilter1}`
             fetch(query)
             .then(response => {
                 return response.text();
@@ -77,39 +75,37 @@ export const Chart1 = (props) => {
                     const currentResult = result[i]
                     let result2 = {};
                     result2.sys_type = currentResult.sys_type
-                    result2.mau = parseInt(currentResult.mau)
-                    result2.dau = parseInt(currentResult.dau)
+                    result2.size = parseInt(currentResult.size)
                     result2.color = currentResult.color
                     result2.date_year_month = currentResult.date_year_month
                     resultArr.push(result2)
                 }
-                setchart1data(resultArr);
+                setchart6data(resultArr);
             });
         }
     }
 
-    function generateChart1(data, METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
-        const title_metric = use_metric.toUpperCase();
+    function generateChart6(data) {
         const title_period = data.map(item => item.date_year_month)[0];
+        const new_data = data.filter(item => item.date_year_month === title_period);
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>{title_metric} for {title_period}</p>
+                <p class='chart-title '>Unique uses of services by systems for {title_period}</p>
             </div>, 
             <div class='row mh-90'>
                 <ResponsiveContainer width={'100%'} height={'100%'}>
                     <PieChart>
                         <Pie
-                        data={data}
+                        data={new_data}
                         color="#000000"
-                        dataKey={`${use_metric}`}
+                        dataKey={`size`}
                         nameKey="sys_type"
                         cx="50%"
                         cy="100%"
                         outerRadius={'200%'}
                         fill="#8884d8"
                         labelLine={false}
-                        label={CustomizedLabelChart1}
+                        label={CustomizedLabelChart6}
                         startAngle={180}
                         endAngle={0}
                         //isAnimationActive={false}
@@ -127,10 +123,10 @@ export const Chart1 = (props) => {
                 </ResponsiveContainer>         
             </div> 
         ]; 
-        setChart1(element);
+        setChart6(element);
     }
 
     return (
-        chart1 ? chart1 : 'Smth wrong'
+        chart6 ? chart6 : 'Smth wrong'
     )
 }
