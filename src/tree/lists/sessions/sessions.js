@@ -39,17 +39,12 @@ export const Sessions = (props) => {
                     </div>
                 </div>
                 <div class="row mh-60">
-                    <div class='col col-4 h-100 cobj' >
+                    <div class='col col-6 h-100 cobj' >
                         <div class='col obj h-100'>
                         lol
                         </div>
                     </div>
-                    <div class='col col-4 h-100 cobj'>
-                        <div class='col obj h-100'>
-                        lol
-                        </div>
-                    </div>
-                    <div class='col col-4 h-100 cobj' >
+                    <div class='col col-6 h-100 cobj' >
                         <div class='col obj h-100'>
                             <Chart13 />
                         </div>

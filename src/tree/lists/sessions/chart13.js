@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { subscriberFilter1 } from '../../../MessageService.js';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer, Legend } from 'recharts';
 
 export const Chart13 = (props) => {
 
@@ -53,6 +53,8 @@ export const Chart13 = (props) => {
                     let result2 = {};
                     result2.date_id = currentResult.date_id.substring(0,10);
                     result2.avg_duration_min = currentResult.avg_duration_min;
+                    result2.proc_success_session = currentResult.proc_success_session;
+                    result2.session_timeout = currentResult.session_timeout;
                     resultArr.push(result2)
                 }
                 setchart13data(resultArr);
@@ -71,6 +73,8 @@ export const Chart13 = (props) => {
                     let result2 = {};
                     result2.date_id = currentResult.date_id.substring(0,10);
                     result2.avg_duration_min = currentResult.avg_duration_min;
+                    result2.proc_success_session = currentResult.proc_success_session;
+                    result2.session_timeout = currentResult.session_timeout;
                     resultArr.push(result2)
                 }
                 setchart13data(resultArr);
@@ -79,11 +83,29 @@ export const Chart13 = (props) => {
     };
 
     function generateChart13(data) {
-        const dMin = Math.round((Math.min(...data.map(o => o.avg_duration_min)) - Math.min(...data.map(o => o.avg_duration_min))*0.1)/10)*10+5;
-        const dMax = Math.round((Math.max(...data.map(o => o.avg_duration_min)) + Math.min(...data.map(o => o.avg_duration_min))*0.1)/10)*10-5;
+        const dMin_1 = Math.round((Math.min(...data.map(o => o.avg_duration_min)) - Math.min(...data.map(o => o.avg_duration_min))*0.1)/10)*10+5;
+        const dMax_1 = Math.round((Math.max(...data.map(o => o.avg_duration_min)) + Math.min(...data.map(o => o.avg_duration_min))*0.1)/10)*10-5;
+        const dMin_2 = Math.min(...data.map(o => o.proc_success_session)) - Math.min(...data.map(o => o.proc_success_session))*0.1;
+        const dMax_2 = Math.max(...data.map(o => o.proc_success_session)) + Math.min(...data.map(o => o.proc_success_session))*0.1;
+        const dMin_3 = Math.min(...data.map(o => o.session_timeout)) - Math.min(...data.map(o => o.session_timeout))*0.1;
+        const dMax_3 = Math.max(...data.map(o => o.session_timeout)) + Math.min(...data.map(o => o.session_timeout))*0.1;
+        var dMin_4 = 0;
+        var dMax_4 = 0;
+        if ( dMin_2 >  dMin_3) {
+            dMin_4 = Math.round(dMin_3/10)*10-5;
+        }
+        else {
+            dMin_4 = Math.round(dMin_2/10)*10-5;
+        }
+        if ( dMax_2 >  dMax_3) {
+            dMax_4 = Math.round(dMax_2/10)*10+5;
+        }
+        else {
+            dMax_4 = Math.round(dMax_3/10)*10+5;
+        }
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>Cart Abandonment Rate</p>
+                <p class='chart-title-2'>Dependence of AVG duration and conversion on number of sessions TIMEOUT</p>
             </div>, 
             <div class='row mh-90'>
                 <ResponsiveContainer width={'100%'} height={'100%'}>
@@ -97,12 +119,26 @@ export const Chart13 = (props) => {
                         }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <YAxis domain={[dMin, dMax]} name="AVG Duration" unit={'min'}/>
-                        <XAxis dataKey="date_id"  interval={'preserveStartEnd'} tickSize={5} height={20} tick={{fontSize: 9}} />
+                        <YAxis domain={[dMin_1, dMax_1]} name="AVG Duration" unit={'min'} yAxisId={1}/>
+                        <YAxis domain={[dMin_4, dMax_4]} unit={'%'} yAxisId={2} orientation={'right'}/>
+                        <XAxis dataKey="date_id" interval={'preserveStartEnd'} tickSize={5} height={20} tick={{fontSize: 9}} />
                         <Tooltip />
+                        <Legend verticalAlign="top" />
                         <Brush dataKey='date_id' height={10} tickFormatter={() => { return ''}} />
-                        <Line type="monotone" dataKey={`avg_duration_min`} name={'avg_duration_min'}  stroke="#4477aa" fill="#4477aa"  dot={{ r: 1.5 }} 
-                        //label={<CustomizedLabelChart13 />} 
+                        <Line 
+                            yAxisId={1} type="monotone" dataKey={`avg_duration_min`} name={'AVG duration, Min'} 
+                            strokeWidth={1.5}  stroke="#f8981d" fill="#f8981d"  dot={{ r: 1.2 }} 
+                            isAnimationActive={true}
+                        />
+                        <Line 
+                            yAxisId={2} type="monotone" dataKey={`proc_success_session`} name={'Session conversion, %'} 
+                            strokeWidth={1.5} stroke="#4477aa" fill="#4477aa"  dot={{ r: 1.2 }} 
+                            isAnimationActive={true}
+                        />
+                        <Line 
+                            yAxisId={2} type="monotone" dataKey={`session_timeout`} name={'Session TIMEOUT, %'} 
+                            strokeWidth={1.5} stroke="#8e477d" fill="#8e477d"  dot={{ r: 1.2 }} 
+                            isAnimationActive={true}
                         />
                     </LineChart>
                 </ResponsiveContainer>         

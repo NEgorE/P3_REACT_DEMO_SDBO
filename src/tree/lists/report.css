@@ -96,6 +96,13 @@
     text-align: left;
     font-weight: 500;
 }
+.chart-title-2{
+    margin: 0 0.5em;
+    font-size: 1.4em;
+    color: var(--bs-gray-600);
+    text-align: left;
+    font-weight: 500;
+}
 .treemap_container{
     padding: 0.1em;
 }
