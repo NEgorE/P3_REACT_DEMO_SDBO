@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { subscriberFilter1 } from '../../../MessageService.js';
-
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, ResponsiveContainer, Legend } from 'recharts';
+import { interpolateYlGnBu } from 'd3-scale-chromatic';
 
 export const Chart12 = (props) => {
 
     const log_prefix = 'CHART12: '
 
     const currFilter1 = subscriberFilter1._value
-
 
     const [chart12, setChart12] = useState(false)
     const [chart12data, setchart12data] = useState(false)
@@ -73,6 +71,8 @@ export const Chart12 = (props) => {
         console.log(data);
         const table_head_data =[...new Set(data.map(o => o.diap))];
         const table_hrow_data =[...new Set(data.map(o => o.date_year_month))];
+        const minData = Math.min(...data.map(o => o.count)) ;
+        const maxData = Math.max(...data.map(o => o.count)) ;
         console.log(table_hrow_data);
         const element = [
             <div class='row mh-10'>
@@ -90,20 +90,21 @@ export const Chart12 = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                                {table_hrow_data.map((el, key) =>(
+                                {table_hrow_data.map((el1, key) =>(
                                     <tr>
-                                        <th scope="row" id={`hmap_t_row ${key}`} class='heatmap-head-row'>{el}</th>
+                                        <th scope="row" id={`hmap_t_row ${key}`} class='heatmap-head-row'>{el1}</th>
                                         {
-                                            data.filter(item => item.date_year_month === el).map(item => item.count).map(
-                                                (el, key) =>(
+                                            data.filter(item => item.date_year_month === el1).map(item => item.count).map(
+                                                (el2, key) =>(
                                                     <td 
                                                         class='table-value'  
                                                         id={`hmap_t_row_value ${key}`} 
-                                                        data-toggle="tooltip" data-placement="top" title={`Count: ${el}`} 
+                                                        data-toggle="tooltip" data-placement="top" title={`Count: ${el2}`}
+                                                        style={{backgroundColor: interpolateYlGnBu((el2-minData)/(maxData-minData))}}
                                                         >
-                                                        {el}
                                                     </td>
-                                                ))
+                                                )
+                                            )
                                         }
                                     </tr>
                                 ))}
