@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Filter1 } from '../../components/filtres/filter1.js';
 import { Chart13 } from './chart13.js';
+import { Chart12 } from './chart12.js';
 
 export const Sessions = (props) => {
 
@@ -41,7 +42,7 @@ export const Sessions = (props) => {
                 <div class="row mh-60">
                     <div class='col col-6 h-100 cobj' >
                         <div class='col obj h-100'>
-                        lol
+                            <Chart12 />
                         </div>
                     </div>
                     <div class='col col-6 h-100 cobj' >
