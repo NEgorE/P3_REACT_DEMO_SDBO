@@ -268,6 +268,26 @@ function selectSessionsChart13(currFilter1) {
   });
 }
 
+function selectSessionsChart12(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select * from dbo.sessions_datamart_chart_12 where date_yq in (${currFilter1_array2})  order by 2 desc, 3`;
+    }
+    else {
+      var select_q =  `select * from dbo.sessions_datamart_chart_12 order by 2 desc, 3`;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -282,5 +302,6 @@ module.exports = {
     selectServicesCountBySystem,
     selectServicesCountByUsedByClients,
     selectDailyServices,
-    selectSessionsChart13
+    selectSessionsChart13,
+    selectSessionsChart12
   }
