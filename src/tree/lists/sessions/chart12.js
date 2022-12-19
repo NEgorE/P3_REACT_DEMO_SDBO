@@ -40,10 +40,9 @@ export const Chart12 = (props) => {
                 for (let i = 0; i < result.length; i++) {
                     const currentResult = result[i]
                     let result2 = {};
-                    result2.date_id = currentResult.date_id.substring(0,10);
-                    result2.avg_duration_min = currentResult.avg_duration_min;
-                    result2.proc_success_session = currentResult.proc_success_session;
-                    result2.session_timeout = currentResult.session_timeout;
+                    result2.date_year_month = currentResult.date_year_month;
+                    result2.diap = currentResult.diap;
+                    result2.count = currentResult.count;
                     resultArr.push(result2)
                 }
                 setchart12data(resultArr);
@@ -60,10 +59,9 @@ export const Chart12 = (props) => {
                 for (let i = 0; i < result.length; i++) {
                     const currentResult = result[i]
                     let result2 = {};
-                    result2.date_id = currentResult.date_id.substring(0,10);
-                    result2.avg_duration_min = currentResult.avg_duration_min;
-                    result2.proc_success_session = currentResult.proc_success_session;
-                    result2.session_timeout = currentResult.session_timeout;
+                    result2.date_year_month = currentResult.date_year_month;
+                    result2.diap = currentResult.diap;
+                    result2.count = currentResult.count;
                     resultArr.push(result2)
                 }
                 setchart12data(resultArr);
@@ -72,13 +70,46 @@ export const Chart12 = (props) => {
     };
 
     function generateChart12(data) {
-        
+        console.log(data);
+        const table_head_data =[...new Set(data.map(o => o.diap))];
+        const table_hrow_data =[...new Set(data.map(o => o.date_year_month))];
+        console.log(table_hrow_data);
         const element = [
             <div class='row mh-10'>
                 <p class='chart-title-2'>Session Concentration by parts of day</p>
             </div>, 
             <div class='row mh-90'>
-                lol
+                <div class='col container'>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" class='heatmap-head-col'>#</th>
+                                {table_head_data.map((el, key) =>(
+                                    <th scope="col" id={`hmap_t_head ${key}`} class='heatmap-head-col'>{el}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {table_hrow_data.map((el, key) =>(
+                                    <tr>
+                                        <th scope="row" id={`hmap_t_row ${key}`} class='heatmap-head-row'>{el}</th>
+                                        {
+                                            data.filter(item => item.date_year_month === el).map(item => item.count).map(
+                                                (el, key) =>(
+                                                    <td 
+                                                        class='table-value'  
+                                                        id={`hmap_t_row_value ${key}`} 
+                                                        data-toggle="tooltip" data-placement="top" title={`Count: ${el}`} 
+                                                        >
+                                                        {el}
+                                                    </td>
+                                                ))
+                                        }
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                </div>
             </div> 
         ]; 
         setChart12(element);

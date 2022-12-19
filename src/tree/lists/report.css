@@ -106,3 +106,17 @@
 .treemap_container{
     padding: 0.1em;
 }
+.heatmap-head-col{
+    font-size: 0.7em;
+}
+.heatmap-head-row{
+    font-size: 0.7em;
+}
+.table-value{
+    font-size: 0.2em;
+}
+.container{
+    height: 98%;
+    overflow-y: auto;
+    margin: 0 .8em 0em .4em;
+}
