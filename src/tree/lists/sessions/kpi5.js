@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
 import { METRICS } from '../../components/constants';
 
-export const Kpi3 = (props) => {
+export const Kpi5 = (props) => {
 
-    const log_prefix = 'KPI3: '
+    const log_prefix = 'KPI5: '
 
     const currMetric = subscriberMetric1._value
     const currFilter1 = subscriberFilter1._value
 
-    const [kpi3, setKpi3] = useState(false)
-    const [kpi3data, setKpi3data] = useState(false)
+    const [kpi5, setKpi5] = useState(false)
+    const [kpi5data, setKpi5data] = useState(false)
 
     useEffect(() => {
-        getKpi3Data();
+        getKpi5Data();
     }, [])
 
     useEffect(() => {
-        if(kpi3data){
-            generateKpi3(kpi3data, METRICS, currMetric);
+        if(kpi5data){
+            generateKpi5(kpi5data, METRICS, currMetric);
         }
-    }, [kpi3data])
+    }, [kpi5data])
 
     useEffect(() => {
-        getKpi3Data();
+        getKpi5Data();
     }, [currFilter1, currMetric])
     
-    function getKpi3Data() {
+    function getKpi5Data() {
         let result = false;
         if ( currFilter1.length <= 0 ) {
             fetch(`http://localhost:3001/select_mau`)
@@ -35,7 +35,7 @@ export const Kpi3 = (props) => {
             })
             .then(data => {
                 result = JSON.parse(data);
-                setKpi3data(result);
+                setKpi5data(result);
             });
         }
         else {
@@ -46,12 +46,12 @@ export const Kpi3 = (props) => {
             })
             .then(data => {
                 result = JSON.parse(data);
-                setKpi3data(result);
+                setKpi5data(result);
             });
         }
     };
 
-    function generateKpi3(data, METRICS, currMetric) {
+    function generateKpi5(data, METRICS, currMetric) {
         const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0].toUpperCase()
         const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
         const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
@@ -93,10 +93,10 @@ export const Kpi3 = (props) => {
                 </div>
             </div>
         )
-        setKpi3(element)
+        setKpi5(element)
     }
 
     return (
-        kpi3 ? kpi3 : 'Smth wrong'
+        kpi5 ? kpi5 : 'Smth wrong'
     )
 }

@@ -4,6 +4,8 @@ import { Chart13 } from './chart13.js';
 import { Chart12 } from './chart12.js';
 import { Chart11 } from './chart11.js';
 import { Kpi3 } from './kpi3.js';
+import { Kpi4 } from './kpi4.js';
+import { Kpi5 } from './kpi5.js';
 
 export const Sessions = (props) => {
 
@@ -28,10 +30,10 @@ export const Sessions = (props) => {
                                 <Kpi3 />
                             </div>
                             <div class='col h-100 cobj' >
-                                KPI2
+                                <Kpi4 />
                             </div>
                             <div class='col h-100 cobj' >
-                                KPI3
+                                <Kpi5 />
                             </div>
                         </div>
                     </div>
