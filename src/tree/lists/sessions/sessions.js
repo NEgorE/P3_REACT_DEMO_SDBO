@@ -3,6 +3,7 @@ import { Filter1 } from '../../components/filtres/filter1.js';
 import { Chart13 } from './chart13.js';
 import { Chart12 } from './chart12.js';
 import { Chart11 } from './chart11.js';
+import { Kpi3 } from './kpi3.js';
 
 export const Sessions = (props) => {
 
@@ -24,7 +25,7 @@ export const Sessions = (props) => {
                         </div>
                         <div class="row mh-80">
                             <div class='col h-100 cobj' >
-                                KPI1
+                                <Kpi3 />
                             </div>
                             <div class='col h-100 cobj' >
                                 KPI2
