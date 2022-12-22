@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Filter1 } from '../../components/filtres/filter1.js';
 import { Chart13 } from './chart13.js';
 import { Chart12 } from './chart12.js';
+import { Chart11 } from './chart11.js';
+import { Kpi3 } from './kpi3.js';
+import { Kpi4 } from './kpi4.js';
+import { Kpi5 } from './kpi5.js';
 
 export const Sessions = (props) => {
 
@@ -23,19 +27,19 @@ export const Sessions = (props) => {
                         </div>
                         <div class="row mh-80">
                             <div class='col h-100 cobj' >
-                                KPI1
+                                <Kpi3 />
                             </div>
                             <div class='col h-100 cobj' >
-                                KPI2
+                                <Kpi4 />
                             </div>
                             <div class='col h-100 cobj' >
-                                KPI3
+                                <Kpi5 />
                             </div>
                         </div>
                     </div>
                     <div class='col col-4 h-100 cobj' >
                         <div class='col obj h-100'>
-                            lol 
+                            <Chart11 />  
                         </div>
                     </div>
                 </div>

@@ -288,6 +288,26 @@ function selectSessionsChart12(currFilter1) {
   });
 }
 
+function selectSessionsChart11(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `select *, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.sessions_datamart_chart_11 where date_yq in (${currFilter1_array2})  order by 2 desc, 3`;
+    }
+    else {
+      var select_q =  `select *, case sys_type when 'Android' then '#a4c639' when 'iOS' then '#8e8e93' else '#007AFF' end as COLOR from dbo.sessions_datamart_chart_11 order by 2 desc, 3`;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -303,5 +323,6 @@ module.exports = {
     selectServicesCountByUsedByClients,
     selectDailyServices,
     selectSessionsChart13,
-    selectSessionsChart12
+    selectSessionsChart12,
+    selectSessionsChart11
   }
