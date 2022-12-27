@@ -320,7 +320,7 @@ function selectSessionsKpi3(currFilter1) {
                         avg(dm13.proc_success_session)::numeric(8,1) as avg_succ_sess
                       FROM dbo.sessions_datamart_chart_13 dm13
                       left join dbo.csv_cal cc on cc.date_id=dm13.date_id
-                      where date_yq in (${currFilter1_array2})
+                      where dm13.date_yq in (${currFilter1_array2})
                       group by 
                         dm13.date_yq, 
                         cc.date_year_month
@@ -351,6 +351,33 @@ function selectSessionsKpi3(currFilter1) {
   });
 }
 
+function selectSessionsKpi4(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `
+                      select * from dbo.sessions_datamart_kpi4
+                      where date_yq in (${currFilter1_array2})
+                      order by 2 desc;
+                      `;
+    }
+    else {
+      var select_q =  `
+                      select * from dbo.sessions_datamart_kpi4
+                      order by 2 desc;
+                      `;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -368,5 +395,6 @@ module.exports = {
     selectSessionsChart13,
     selectSessionsChart12,
     selectSessionsChart11,
-    selectSessionsKpi3
+    selectSessionsKpi3,
+    selectSessionsKpi4
   }
