@@ -1,0 +1,27 @@
+.kpi-text-f-title-sess{
+    margin: 0;
+    font-size: 2em;
+    text-align: center;
+    color: var(--bs-gray-600);
+}
+
+.kpi-text-f-time{
+    margin: 0;
+    font-size: 4em;
+    color: #4477aa;
+    text-align: right;
+    padding-right: calc(var(--bs-gutter-x) * .15);
+}
+.kpi-text-s-time {
+    margin: 0;
+    font-size: 1.6em;
+    text-align: left;
+    padding-left: calc(var(--bs-gutter-x));
+    color: #8e477d;
+}
+.kpi-text-s-title-time{
+    margin: 0;
+    text-align: left;
+    padding-left: calc(var(--bs-gutter-x));
+    color: var(--bs-gray-600);
+}

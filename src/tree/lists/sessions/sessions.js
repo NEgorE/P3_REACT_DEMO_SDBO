@@ -7,6 +7,8 @@ import { Kpi3 } from './kpi3.js';
 import { Kpi4 } from './kpi4.js';
 import { Kpi5 } from './kpi5.js';
 
+import "./session.css";
+
 export const Sessions = (props) => {
 
     const [container, setContainer] = useState(false)
