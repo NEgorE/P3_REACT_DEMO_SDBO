@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { METRICS } from '../../components/constants';
+import { subscriberFilter1 } from '../../../MessageService.js';
 
 export const Kpi3 = (props) => {
 
@@ -66,15 +65,15 @@ export const Kpi3 = (props) => {
                     </div>
                 </div>
                 <div class='row h-75 row-kpi'>
-                    <div class='col col-7 h-100 '>
+                    <div class='col col-8 h-100 '>
                         <div class="row align-items-center h-100">
-                            <p class='kpi-text-f'>{valueOfMaxPeriod}</p>
+                            <p class='kpi-text-f'>{valueOfMaxPeriod}%</p>
                         </div>
                         </div>
-                    <div class='col col-5'>
+                    <div class='col col-4'>
                         <div class='row mh-60'>
                             <div class="row align-items-end h-100">
-                                <p class='kpi-text-s'>{valueOfMaxPeriodPref}</p>
+                                <p class='kpi-text-s'>{valueOfMaxPeriodPref}%</p>
                             </div>
                         </div>
                         <div class='row mh-40'>

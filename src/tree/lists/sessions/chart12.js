@@ -68,12 +68,10 @@ export const Chart12 = (props) => {
     };
 
     function generateChart12(data) {
-        console.log(data);
         const table_head_data =[...new Set(data.map(o => o.diap))];
         const table_hrow_data =[...new Set(data.map(o => o.date_year_month))];
         const minData = Math.min(...data.map(o => o.count)) ;
         const maxData = Math.max(...data.map(o => o.count)) ;
-        console.log(table_hrow_data);
         const element = [
             <div class='row mh-10'>
                 <p class='chart-title-2'>Session Concentration by parts of day</p>

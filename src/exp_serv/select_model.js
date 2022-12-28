@@ -378,6 +378,33 @@ function selectSessionsKpi4(currFilter1) {
   });
 }
 
+function selectSessionsKpi5(currFilter1) {
+  return new Promise(function (resolve, reject) {
+
+    if ( currFilter1.length > 0 ) {
+      const currFilter1_array2 = currFilter1.split(',').map(item => "'" + item + "'")
+      var select_q =  `
+                      select * from dbo.sessions_datamart_kpi5
+                      where date_yq in (${currFilter1_array2})
+                      order by 2 desc;
+                      `;
+    }
+    else {
+      var select_q =  `
+                      select * from dbo.sessions_datamart_kpi5
+                      order by 2 desc;
+                      `;
+    }
+
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -396,5 +423,6 @@ module.exports = {
     selectSessionsChart12,
     selectSessionsChart11,
     selectSessionsKpi3,
-    selectSessionsKpi4
+    selectSessionsKpi4,
+    selectSessionsKpi5
   }
