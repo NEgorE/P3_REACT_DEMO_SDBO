@@ -62,7 +62,7 @@ export const Kpi5 = (props) => {
                 <div class='row h-25 row-kpi'>
                     <div class='col h-100'>
                         <div class="row h-100">
-                            <p class='kpi-text-f-title-sess'>AVG Durayion for {maxPeriod}</p>
+                            <p class='kpi-text-f-title-sess'>AVG Duration for {maxPeriod}</p>
                         </div>
                     </div>
                 </div>
