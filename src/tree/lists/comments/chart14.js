@@ -1,60 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { subscriberMetric1 , subscriberFilter1 } from '../../../MessageService.js';
-import { METRICS } from '../../components/constants';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LabelList, CartesianGrid } from 'recharts';
 
 export const Chart14 = (props) => {
 
-    const data_temp = [
-        {
-          name: 'Page A',
-          uv: 4000,
-          pv: 2400,
-          amt: 2400,
-        },
-        {
-          name: 'Page B',
-          uv: 3000,
-          pv: 1398,
-          amt: 2210,
-        },
-        {
-          name: 'Page C',
-          uv: 2000,
-          pv: 9800,
-          amt: 2290,
-        },
-        {
-          name: 'Page D',
-          uv: 2780,
-          pv: 3908,
-          amt: 2000,
-        },
-        {
-          name: 'Page E',
-          uv: 1890,
-          pv: 4800,
-          amt: 2181,
-        },
-        {
-          name: 'Page F',
-          uv: 2390,
-          pv: 3800,
-          amt: 2500,
-        },
-        {
-          name: 'Page G',
-          uv: 3490,
-          pv: 4300,
-          amt: 2100,
-        },
-      ];
-
     const log_prefix = 'CHART14: '
-
-    const currMetric = subscriberMetric1._value
-    const currFilter1 = subscriberFilter1._value
 
     const [chart14, setChart14] = useState(false)
     const [chart14data, setchart14data] = useState(false)
@@ -65,50 +15,48 @@ export const Chart14 = (props) => {
 
     useEffect(() => {
         if(chart14data){
-            generateChart14(data_temp, METRICS, currMetric);
+            generateChart14(chart14data);
         }
     }, [chart14data])
 
-    useEffect(() => {
-        getChart14Data();
-    }, [currFilter1, currMetric])
 
     function getChart14Data() {
         let result = false;
-        if ( currFilter1.length <= 0 ) {
-            fetch(`http://localhost:3001/select_mau_by_segment`)
-            .then(response => {
-                return response.text();
-            })
-            .then(data => {
-                result = JSON.parse(data);
-                setchart14data(result);
-            })
-        }
-        else {
-            const query = `http://localhost:3001/select_mau_by_segment_by_filters/filter1=${currFilter1}`
-            fetch(query)
-            .then(response => {
-                return response.text();
-            })
-            .then(data => {
-                result = JSON.parse(data);
-                setchart14data(result);
-            })
-        }
+        const query = `http://localhost:3001/select_comment_bar_data/`
+        fetch(query)
+        .then(response => {
+            return response.text();
+        })
+        .then(data => {
+            result = JSON.parse(data);
+            setchart14data(result);
+        })
+
     };
 
-    function generateChart14(data_temp, METRICS, currMetric) {
-        const use_metric = METRICS.filter(item => item.npp === currMetric).map(item => item.value)[0]
-        const title_metric = use_metric.toUpperCase();
+    function generateChart14(data) {
+        const new_data = [...data.filter(item => item.sys_type === 'Android')];
+        const dMax = (Math.round(Math.max(...new_data.map(o => o.m_count))/10) +1 )*10;
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>{title_metric} segment concentration</p>
+                <p class='chart-title '>Android. Average X of Y ratings</p>
             </div>, 
             <div class='row mh-90'>
                 <ResponsiveContainer width={'100%'} height={'100%'}>
-                    <BarChart width={150} height={40} data={data_temp} layout="vertical">
-                        <Bar dataKey="uv" fill="#8884d8" />
+                    <BarChart
+                        data={new_data}
+                        margin={{
+                        top: 5,
+                        right: 40,
+                        left: -20,
+                        bottom: 5,
+                        }}
+                        layout="vertical"
+                    >
+                        <CartesianGrid horizontal={0} />
+                        <XAxis type="number" domain={[0, dMax]} ticks={[0, 100, dMax]}/>
+                        <YAxis dataKey="com_mark"  type="category" />
+                        <Bar dataKey="m_count" stackId={"a"}  fill="#3a9058" unit={'%'} ><LabelList dataKey="m_count" position="right"/></Bar>
                     </BarChart>
                 </ResponsiveContainer>       
             </div> 

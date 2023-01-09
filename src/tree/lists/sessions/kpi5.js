@@ -52,10 +52,8 @@ export const Kpi5 = (props) => {
     function generateKpi5(data) {
         const maxPeriod = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[0]
         const maxPeriodPref = data.map(item => item.date_year_month).sort((a, b) => a > b ? -1 : 1)[1]
-        var valueOfMaxPeriod = data.filter(item => item.date_year_month === maxPeriod).map(item => item.avg_duration)[0]
-        var valueOfMaxPeriodPref = data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.avg_duration)[0]
-        console.log(valueOfMaxPeriod)
-        console.log(valueOfMaxPeriodPref)
+        var valueOfMaxPeriod = data.filter(item => item.date_year_month === maxPeriod).map(item => item.avg_duration)[0];
+        var valueOfMaxPeriodPref = data.filter(item => item.date_year_month === maxPeriodPref).map(item => item.avg_duration)[0];
 
         const element = (
             <div class='col obj h-100'>

@@ -405,6 +405,20 @@ function selectSessionsKpi5(currFilter1) {
   });
 }
 
+function selectCommentsBarChartsData() {
+  return new Promise(function (resolve, reject) {
+    var select_q =  `
+                    select * from dbo.comments_datamart_chart_14_16 order by 2 desc;
+                    `;
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -424,5 +438,6 @@ module.exports = {
     selectSessionsChart11,
     selectSessionsKpi3,
     selectSessionsKpi4,
-    selectSessionsKpi5
+    selectSessionsKpi5,
+    selectCommentsBarChartsData
   }
