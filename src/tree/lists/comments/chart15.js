@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LabelList, CartesianGrid, Cell } from 'recharts';
 
-export const Chart14 = (props) => {
+export const Chart15 = (props) => {
 
-    const log_prefix = 'CHART14: '
+    const log_prefix = 'CHART15: '
 
-    const [chart14, setChart14] = useState(false)
-    const [chart14data, setchart14data] = useState(false)
+    const [chart15, setChart15] = useState(false)
+    const [chart15data, setchart15data] = useState(false)
 
     useEffect(() => {
-        getChart14Data();
+        getChart15Data();
     }, [])
 
     useEffect(() => {
-        if(chart14data){
-            generateChart14(chart14data);
+        if(chart15data){
+            generateChart15(chart15data);
         }
-    }, [chart14data])
+    }, [chart15data])
 
 
-    function getChart14Data() {
+    function getChart15Data() {
         let result = false;
         const query = `http://localhost:3001/select_comment_bar_data/`
         fetch(query)
@@ -29,7 +29,7 @@ export const Chart14 = (props) => {
         })
         .then(data => {
             result = JSON.parse(data);
-            setchart14data(result);
+            setchart15data(result);
         })
 
     };
@@ -63,8 +63,8 @@ export const Chart14 = (props) => {
         return returnedArray;
     };
 
-    function generateChart14(data) {
-        const new_data = [...data.filter(item => item.sys_type === 'Android')];
+    function generateChart15(data) {
+        const new_data = [...data.filter(item => item.sys_type === 'iOS')];
         const dMax = (Math.round(Math.max(...new_data.map(o => o.m_count))/10) +1 )*10;
         const data_for_count = [...new_data.map(item => parseInt(item.m_count))];
         const data_for_count2 = [...new_data.map(item => parseInt(item.m_count)*parseInt(item.com_mark))];
@@ -75,10 +75,10 @@ export const Chart14 = (props) => {
             return sum + elem;
         }, 0);
         const avg_of_all=(count_all_for_avg/count_all).toFixed(1);
-        const tecksArray = getTicksArray(0, dMax, 50);
+        const tecksArray = getTicksArray(0, dMax, 25);
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>Android. Average {avg_of_all} of {count_all} ratings</p>
+                <p class='chart-title '>iOS. Average {avg_of_all} of {count_all} ratings</p>
             </div>, 
             <div class='row mh-90'>
                 <ResponsiveContainer width={'100%'} height={'100%'}>
@@ -114,10 +114,10 @@ export const Chart14 = (props) => {
                 </ResponsiveContainer>       
             </div> 
         ];
-        setChart14(element);
+        setChart15(element);
     }
 
     return (
-        chart14 ? chart14 : 'Smth wrong'
+        chart15 ? chart15 : 'Smth wrong'
     )
 }
