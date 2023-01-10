@@ -55,7 +55,7 @@ export const Chart14 = (props) => {
                     >
                         <CartesianGrid horizontal={0} />
                         <XAxis type="number" domain={[0, dMax]} ticks={[0, 100, dMax]}/>
-                        <YAxis dataKey="com_mark"  type="category" />
+                        <YAxis dataKey="com_mark"  type="category" tickLine={0} />
                         <Bar dataKey="m_count" stackId={"a"}  fill="#3a9058" unit={'%'} ><LabelList dataKey="m_count" position="right"/></Bar>
                     </BarChart>
                 </ResponsiveContainer>       
