@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart14 } from './chart14.js';
 import { Chart15 } from './chart15.js';
+import { Chart16 } from './chart16.js';
 
 export const Comments = (props) => {
 
@@ -21,7 +22,7 @@ export const Comments = (props) => {
                     </div>
                     <div class='col col-7 h-100 cobj' >
                         <div class='col obj h-100'>
-                            lol
+                            <Chart16   /> 
                         </div>
                     </div>
                 </div>

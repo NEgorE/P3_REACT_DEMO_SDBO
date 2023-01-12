@@ -2,6 +2,7 @@ import { Maudaucrr } from '../lists/mau_dau_crr/mau_dau_crr.js';
 import { Services } from '../lists/services/services.js';
 import { Sessions } from '../lists/sessions/sessions.js';
 import { Comments } from '../lists/comments/comments.js';
+import React from 'react';
 
 export const TABS = [
     {title: 'MAU/DAU/CRR', type: 1, obj: <Maudaucrr current_list_name='maudaucrr'/>},
