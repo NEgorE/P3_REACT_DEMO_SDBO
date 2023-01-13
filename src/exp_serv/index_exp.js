@@ -211,6 +211,16 @@ app.get('/select_comment_bar_data/', (req, res) => {
   })
 })
 
+app.get('/select_comment_cloud_data/', (req, res) => {
+  select_model.selectCommentsWCloudChartsData()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.send('Some error');
+  })
+})
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })

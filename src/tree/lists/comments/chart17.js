@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import ReactWordcloud from 'react-wordcloud';
 import chroma from "chroma-js";
 
-export const Chart16 = (props) => {
+export const Chart17 = (props) => {
 
-    const log_prefix = 'CHART16: ';
+    const log_prefix = 'CHART17: ';
 
-    const f = chroma.scale(['#ffcf02','#4477aa']).mode('hsl');
+    const f = chroma.scale(['#28c6d5','#545352']).mode('hsl');
 
     const options ={
         rotations: 1,
@@ -21,21 +21,21 @@ export const Chart16 = (props) => {
         return return_callback
       }
 
-    const [chart16, setChart16] = useState(false)
-    const [chart16data, setchart16data] = useState(false)
+    const [chart17, setChart17] = useState(false)
+    const [chart17data, setchart17data] = useState(false)
 
     useEffect(() => {
-        getChart16Data();
+        getChart17Data();
     }, [])
 
     useEffect(() => {
-        if(chart16data){
-            generateChart16(chart16data);
+        if(chart17data){
+            generateChart17(chart17data);
         }
-    }, [chart16data])
+    }, [chart17data])
 
 
-    function getChart16Data() {
+    function getChart17Data() {
         let result = false;
         const query = `http://localhost:3001/select_comment_cloud_data/`
         fetch(query)
@@ -44,16 +44,16 @@ export const Chart16 = (props) => {
         })
         .then(data => {
             result = JSON.parse(data);
-            setchart16data(result);
+            setchart17data(result);
         })
     };
 
-    function generateChart16(input_words) {
-        const new_input_words = [...input_words.filter(item => item.sys_type === 'Android')]
+    function generateChart17(input_words) {
+        const new_input_words = [...input_words.filter(item => item.sys_type === 'iOS')]
         const maxValue = new_input_words.map(item => item.value)[0];
         const element = [
             <div class='row mh-10'>
-                <p class='chart-title '>Android</p>
+                <p class='chart-title '>iOS</p>
             </div>, 
             <div class='row mh-90'>
                 <ReactWordcloud 
@@ -63,10 +63,10 @@ export const Chart16 = (props) => {
                 /> 
             </div>
         ];
-        setChart16(element);
+        setChart17(element);
     }
 
     return (
-        chart16 ? chart16 : 'Smth wrong'
+        chart17 ? chart17 : 'Smth wrong'
     )
 }
