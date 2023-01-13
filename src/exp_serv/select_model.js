@@ -419,6 +419,20 @@ function selectCommentsBarChartsData() {
   });
 }
 
+function selectCommentsWCloudChartsData() {
+  return new Promise(function (resolve, reject) {
+    var select_q =  `
+                    select * from dbo.comments_datamart_chart_15_16 order by 1, 3 desc;
+                    `;
+    pool.query(select_q, (error, results) => {
+      if (error) {
+        reject('Some error')
+      }
+      resolve(results.rows);
+    })
+  });
+}
+
 module.exports = {
     getMerchants,
     selectMerchants,
@@ -439,5 +453,6 @@ module.exports = {
     selectSessionsKpi3,
     selectSessionsKpi4,
     selectSessionsKpi5,
-    selectCommentsBarChartsData
+    selectCommentsBarChartsData,
+    selectCommentsWCloudChartsData
   }
